@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "edu.upc.eetac.dsa.iarroyo.lifeissharing"
+        applicationId "edu.upc.eetac.dsa.dsaqp1415grt4.lifeissharing"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
