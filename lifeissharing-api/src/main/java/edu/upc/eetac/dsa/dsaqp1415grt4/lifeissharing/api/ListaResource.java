@@ -752,7 +752,45 @@ public Item updateItem(@PathParam("idlista") String id,
 		
 	}
 	
+	/* BORRAR UN EDITOR*/  //OK
+
+	private String DELETE_EDITOR_QUERY = "delete from editores where editores.username=? and editores.idlista = ?";
+
+	@DELETE
+	@Path("/{idlista}/editores")
+	public void salirLista(@PathParam("idlista") String id) {
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+
 	
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(DELETE_EDITOR_QUERY);
+			stmt.setString(1, security.getUserPrincipal().getName());
+			stmt.setInt(2, Integer.valueOf(id));
+			
+			int rows = stmt.executeUpdate();
+			if (rows == 0)
+				throw new NotFoundException("No perteneces a esta lista ");
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		
+
+}
 }
 	
 	
