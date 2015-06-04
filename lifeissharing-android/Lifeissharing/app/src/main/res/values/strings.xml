@@ -9,4 +9,5 @@
     <string name="lb_publicar">Publicar</string>
     <string name="post_item">Añadir item</string>
     <string name="post_lista">Crear lista</string>
+    <string name="list_editores">Participantes</string>
 </resources>

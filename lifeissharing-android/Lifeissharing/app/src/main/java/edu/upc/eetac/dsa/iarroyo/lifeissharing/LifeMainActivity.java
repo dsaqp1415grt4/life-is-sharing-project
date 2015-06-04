@@ -107,7 +107,12 @@ public class LifeMainActivity extends ListActivity {
 
         Intent intent = new Intent(this, ItemActivity.class);
         intent.putExtra("url", lista.getLinks().get("items").getTarget());
+        intent.putExtra("url2", lista.getLinks().get("editores").getTarget());
+
+
+
         startActivity(intent);
+
     }
 
     @Override

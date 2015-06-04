@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 
 import edu.upc.eetac.dsa.iarroyo.lifeissharing.api.AppException;
 import edu.upc.eetac.dsa.iarroyo.lifeissharing.api.Item;
+import edu.upc.eetac.dsa.iarroyo.lifeissharing.api.ItemCollection;
 import edu.upc.eetac.dsa.iarroyo.lifeissharing.api.LifeissharingAPI;
 
 /**
@@ -81,7 +82,7 @@ public class WriteItemActivity  extends Activity{
     private void showItems(Item result) {
         String json = new Gson().toJson(result);
         Bundle data = new Bundle();
-        data.putString("json-item", json);
+        data.putString("items", json);
         Intent intent = new Intent();
         intent.putExtras(data);
         setResult(RESULT_OK, intent);

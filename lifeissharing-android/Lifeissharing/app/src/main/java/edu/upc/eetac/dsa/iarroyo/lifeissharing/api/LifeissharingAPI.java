@@ -265,7 +265,6 @@ public class LifeissharingAPI {
             item.setId(jsonItem.getInt("id"));
             item.setIditem(jsonItem.getInt("iditem"));
 
-
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage(), e);
             throw new AppException("Error parsing response");
@@ -353,6 +352,63 @@ public class LifeissharingAPI {
 
         return jsonLista;
     }
+
+
+
+
+    public EditorCollection getEditores(String urlEditores) throws AppException {
+        Log.d(TAG, "getEditores()");
+        EditorCollection editores = new EditorCollection();
+
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(urlEditores);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+            urlConnection.connect();
+        } catch (IOException e) {
+            throw new AppException(
+                    "Can't connect to Books API Web Service");
+        }
+
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+
+            JSONObject jsonObject = new JSONObject(sb.toString());
+
+
+
+            JSONArray jsonEditores = jsonObject.getJSONArray("editores");
+            for (int i = 0; i < jsonEditores.length(); i++) {
+
+                Editor editor = new Editor();
+                JSONObject jsonEditor = jsonEditores.getJSONObject(i);
+
+                editor.setUsername(jsonEditor.getString("username"));
+
+                editores.getEditores().add(editor);
+
+
+
+            }
+        } catch (IOException e) {
+            throw new AppException(
+                    "Can't get response from Lifeissharing API Web Service");
+        } catch (JSONException e) {
+            throw new AppException("Error parsing Lifeissharing Root API");
+        }
+
+        return editores;
+    }
+
 
 
 }

@@ -24,6 +24,7 @@
         <activity android:name=".ItemActivity"></activity>
         <activity android:name=".WriteItemActivity"></activity>
         <activity android:name=".WriteListaActivity"></activity>
+        <activity android:name=".EditorActivity"></activity>
     </application>
 
 </manifest>

@@ -30,6 +30,7 @@ public class ItemActivity extends ListActivity{
     ArrayList<Item> itemList;
     private ItemAdapter adapter;
     String urlItems  = null;
+    String urlEditores = null;
 
 
 
@@ -39,6 +40,7 @@ public class ItemActivity extends ListActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_activity);
         urlItems = (String) getIntent().getExtras().get("url");
+        urlEditores = (String) getIntent().getExtras().get("url2");
 
         itemList = new ArrayList<Item>();
         adapter = new ItemAdapter(this, itemList);
@@ -109,6 +111,14 @@ public class ItemActivity extends ListActivity{
                 intent.putExtra("url", urlItems);
 
                 startActivity(intent);
+                return true;
+
+            case R.id.list_editores:
+                Intent intent2 = new Intent(this, EditorActivity.class);
+
+                intent2.putExtra("url2", urlEditores);
+
+                startActivity(intent2);
                 return true;
 
             default:
