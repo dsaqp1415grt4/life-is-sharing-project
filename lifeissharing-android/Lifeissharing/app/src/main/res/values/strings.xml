@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Life is Sharing</string>
+    <string name="login_l_username">Username</string>
+    <string name="login_l_password">Password</string>
+    <string name="login_l_signin">Sign in</string>
+    <string name="l_descrip">Descripcion</string>
+    <string name="l_nombre">Nombre lista</string>
+    <string name="lb_cancel">Cancelar</string>
+    <string name="lb_publicar">Publicar</string>
+    <string name="post_item">Añadir item</string>
+    <string name="post_lista">Crear lista</string>
+</resources>

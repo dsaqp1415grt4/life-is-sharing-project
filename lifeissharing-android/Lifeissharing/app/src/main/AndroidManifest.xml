@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.upc.eetac.dsa.iarroyo.lifeissharing" >
+    <uses-permission
+        android:name="android.permission.INTERNET" />
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
+        <activity
+            android:name=".LoginActivity"
+            android:noHistory="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <activity android:name=".LifeMainActivity"></activity>
+        <activity android:name=".ItemActivity"></activity>
+        <activity android:name=".WriteItemActivity"></activity>
+        <activity android:name=".WriteListaActivity"></activity>
+    </application>
+
+</manifest>
