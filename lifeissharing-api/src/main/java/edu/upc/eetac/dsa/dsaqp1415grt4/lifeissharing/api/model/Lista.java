@@ -20,7 +20,8 @@ import edu.upc.eetac.dsa.dsaqp1415grt4.lifeissharing.api.MediaType;
 public class Lista {
 	@InjectLinks({
 		@InjectLink(value = "/listas/{idlista}", style = Style.ABSOLUTE, rel = "self", title = "self-lista", type = MediaType.LIFE_API_LISTA, bindings = { @Binding(name = "idlista", value = "${instance.idlista}")}),
-		@InjectLink(value = "/listas/{idlista}/items", style = Style.ABSOLUTE, rel = "items", title = "Todos los items de la lista", type = MediaType.LIFE_API_LISTA_COLLECTION, bindings = { @Binding(name = "idlista", value = "${instance.idlista}") })})
+		@InjectLink(value = "/listas/{idlista}/items", style = Style.ABSOLUTE, rel = "items", title = "Todos los items de la lista", type = MediaType.LIFE_API_LISTA_COLLECTION, bindings = { @Binding(name = "idlista", value = "${instance.idlista}") }),
+		@InjectLink(value = "/listas/{idlista}/editores", style = Style.ABSOLUTE, rel = "editores", title = "Todos los editores de la lista", type = MediaType.LIFE_API_LISTA_COLLECTION, bindings = { @Binding(name = "idlista", value = "${instance.idlista}") })})
 	private List<Link> links;
 	private int idlista;
 	private String nombre;
