@@ -25,6 +25,7 @@
         <activity android:name=".WriteItemActivity"></activity>
         <activity android:name=".WriteListaActivity"></activity>
         <activity android:name=".EditorActivity"></activity>
+        <activity android:name=".InvitarUserActivity"></activity>
     </application>
 
 </manifest>

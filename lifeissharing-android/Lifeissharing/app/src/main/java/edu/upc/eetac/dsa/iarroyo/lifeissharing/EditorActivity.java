@@ -91,17 +91,25 @@ public class EditorActivity extends ListActivity{
 
 
 
-/*
 
-SI AÑADIMOS INVITAR LLAMAMOS AL LAYOUT DESDE AQUI
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_user, menu);
+        return true;
+    }
+
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.post_item:
-                Intent intent = new Intent(this, WriteItemActivity.class);
+            case R.id.post_user:
+                Intent intent = new Intent(this, InvitarUserActivity.class);
 
-                intent.putExtra("url", urlItems);
+                intent.putExtra("url", urlEditores);
 
                 startActivity(intent);
                 return true;
@@ -110,6 +118,6 @@ SI AÑADIMOS INVITAR LLAMAMOS AL LAYOUT DESDE AQUI
                 return super.onOptionsItemSelected(item);
         }
     }
-*/
+
 
 }

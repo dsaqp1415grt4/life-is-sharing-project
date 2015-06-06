@@ -409,6 +409,65 @@ public class LifeissharingAPI {
         return editores;
     }
 
+    public Editor createEditor(String texto, String urlEditor) throws AppException {
+
+
+        Editor editor = new Editor();
+
+        editor.setUsername(texto);
+
+
+        HttpURLConnection urlConnection = null;
+        try {
+
+            JSONObject jsonEditor = createJsonEditor(editor);
+            URL url = new URL(urlEditor);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestProperty("Accept",
+                    MediaType.LIFE_API_LISTA);
+            urlConnection.setRequestProperty("Content-Type",
+                    MediaType.LIFE_API_LISTA);
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+            urlConnection.connect();
+            PrintWriter writer = new PrintWriter(
+                    urlConnection.getOutputStream());
+            writer.println(jsonEditor.toString());
+            writer.flush();
+            //writer.close();
+            int rc = urlConnection.getResponseCode();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            jsonEditor = new JSONObject(sb.toString());
+
+            editor.setUsername(jsonEditor.getString("username"));
+;
+
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Error parsing response");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Error getting response");
+        } finally {
+            if (urlConnection != null)
+                urlConnection.disconnect();
+        }
+        return editor;
+    }
+
+    private JSONObject createJsonEditor(Editor editor) throws JSONException {
+        JSONObject jsonEditor = new JSONObject();
+        jsonEditor.put("username", editor.getUsername());
+
+        return jsonEditor;
+    }
 
 
 }

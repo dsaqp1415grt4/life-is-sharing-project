@@ -31,6 +31,7 @@ import edu.upc.eetac.dsa.dsaqp1415grt4.lifeissharing.api.model.Item;
 import edu.upc.eetac.dsa.dsaqp1415grt4.lifeissharing.api.model.ItemCollection;
 import edu.upc.eetac.dsa.dsaqp1415grt4.lifeissharing.api.model.Lista;
 import edu.upc.eetac.dsa.dsaqp1415grt4.lifeissharing.api.model.ListaCollection;
+import edu.upc.eetac.dsa.dsaqp1415grt4.lifeissharing.api.model.User;
 
 
 
@@ -716,6 +717,9 @@ public Item updateItem(@PathParam("idlista") String id,
 		
 		validateCreador(lista);
 		
+		getUserFromDatabase(editor.getUsername());
+		
+		
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -790,7 +794,55 @@ public Item updateItem(@PathParam("idlista") String id,
 		}
 		
 
-}
+	}
+	
+	private String GET_USERS_BY_USERNAME_QUERY = "select username from usuario where usuario.username = ?";
+
+	public void getUserFromDatabase(String username) {
+		User user = new User();
+		boolean exists = false;
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_USERS_BY_USERNAME_QUERY);
+			stmt.setString(1, username);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				
+				user.setUsername(rs.getString("username"));
+				exists = true;
+			} else {
+				throw new NotFoundException("No hay ningún usuario con username= "
+						+ username);
+				
+			}
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		
+		
+		if (exists == false)
+			throw new ForbiddenException("Usuario no encontrado ");
+		
+		
+	}
+
+	
+	
 }
 	
 	
