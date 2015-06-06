@@ -1,6 +1,6 @@
-var API_BASE_URL = "http://localhost:8080/lifeissharing";
-var USERNAME = "";
-var PASSWORD = "";
+var API_BASE_URL = "http://localhost:8080/lifeissharing-api";
+var USERNAME = "NachoTelematic";
+var PASSWORD = "nacho";
 
 $.ajaxSetup({
     headers: { 'Authorization': "Basic " + btoa(USERNAME + ':' + PASSWORD) }
@@ -40,17 +40,24 @@ function getListsfromUser(url) {
 		crossDomain : true,
 		dataType : 'json',
 	}).done(function(data, status, jqxhr) {
-				var repos = data.games;
-				
-				$.each(repos, function(i, v) {
-					var file = v;
+				var listas = data;
+				$.each(listas, function(i, v) {
+					var lista = v;
+					if (i == "links"){	
+					}
+					
+					else{
+					$.each(lista, function(j,v){
+					
+						var lista = v;
+						$('<br><strong>Nombre: </strong>' + lista.nombre + '<br>').appendTo($("#resultlistas"));
+						$('<strong> Creador: </strong> ' + lista.creador + '<br>').appendTo($("#resultlistas"));
+						//$('<br><strong> ID: ' + lista.idlista + '</strong><br>').appendTo($("#resultlistas"));
+						$('<strong> fecha: </strong> ' + lista.fecha_creacion + '<br>').appendTo($("#resultlistas"));
+	                    $('<strong>ultima_mod: </strong>' + lista.ultima_modificacion + '<br>').appendTo($("#resultlistas"));
+					})
+					}
 
-					$('<br><strong> ID: ' + file.id + '</strong><br>').appendTo($('"#resultlistas"'));
-					$('<strong> URL: </strong> ' + file.url + '<br>').appendTo($('"#resultlistas"'));
-					$('<strong> Description: </strong> ' + file.description + '<br>').appendTo($('#resultlistas'));
-                    $('<strong>Creation Date: </strong>' + file.creationdate + '<br>').appendTo($('#resultlistas'));
-                    $('<strong>Userlist: </strong>' + file.userlist + '<br>').appendTo($('#resultlistas'));
-                    
 				});
 				
 
@@ -61,8 +68,8 @@ function getListsfromUser(url) {
 }
 
 //Get 
-function getGamebyid(gameid) {
-	var url = API_BASE_URL + '/game/' + gameid;
+function getListabyid(listaid) {
+	var url = API_BASE_URL + '/lista/' + listaid;
 	$("#result").text('');
 
 	$.ajax({
