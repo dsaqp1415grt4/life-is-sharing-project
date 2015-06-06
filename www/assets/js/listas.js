@@ -21,11 +21,11 @@ $(document).ready(function(){
 	getListsfromUser(url);
 });
 
-//get
+//Get
 
-$("#button_get").click(function(e){
+$("#button_getalistaxid").click(function(e){
     e.preventDefault();
-    getGamebyid($("#id").val());
+    getGamebyid($("#idlista").val());
 //}
 });
 
@@ -50,9 +50,9 @@ function getListsfromUser(url) {
 					$.each(lista, function(j,v){
 					
 						var lista = v;
-						$('<br><strong>Nombre: </strong>' + lista.nombre + '<br>').appendTo($("#resultlistas"));
+						$('<br><strong>Nombre:' + lista.nombre + '</strong><br>').appendTo($("#resultlistas"));
 						$('<strong> Creador: </strong> ' + lista.creador + '<br>').appendTo($("#resultlistas"));
-						//$('<br><strong> ID: ' + lista.idlista + '</strong><br>').appendTo($("#resultlistas"));
+						$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
 						$('<strong> fecha: </strong> ' + lista.fecha_creacion + '<br>').appendTo($("#resultlistas"));
 	                    $('<strong>ultima_mod: </strong>' + lista.ultima_modificacion + '<br>').appendTo($("#resultlistas"));
 					})
@@ -70,7 +70,7 @@ function getListsfromUser(url) {
 //Get 
 function getListabyid(listaid) {
 	var url = API_BASE_URL + '/lista/' + listaid;
-	$("#result").text('');
+	$("#resultlistasxid").text('');
 
 	$.ajax({
 		url : url,
@@ -79,16 +79,16 @@ function getListabyid(listaid) {
 		dataType : 'json',
 	}).done(function(data, status, jqxhr) {
 
-				var partida = data;
+				var listaxid = data;
 
-				$('<br><strong> id: ' + partida.id + '</strong><br>').appendTo($('#result'));
-				$('<strong> URL: </strong> ' + partida.url + '<br>').appendTo($('#result'));
-				$('<strong> Description: </strong> ' + partida.description + '<br>').appendTo($('#result'));
-                $('<strong>Creation Date: </strong>' + partida.creationdate + '<br>').appendTo($('#result'));
-                $('<strong>Userlist: </strong>' + partida.userlist + '<br>').appendTo($('#result'));
+				$('<br><strong>Nombre:' + lisxidta.nombre + '</strong><br>').appendTo($("#resultlistasxid"));
+				$('<strong> Creador: </strong> ' + listaxid.creador + '<br>').appendTo($("#resultlistasxid"));
+				//$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
+				$('<strong> fecha: </strong> ' + listaxid.fecha_creacion + '<br>').appendTo($("#resultlistasxid"));
+                $('<strong>ultima_mod: </strong>' + listaxid.ultima_modificacion + '<br>').appendTo($("#resultlistasxid"));
 
 			}).fail(function() {
-				$('<div class="alert alert-danger"> <strong>Oh!</strong> game not found </div>').appendTo($('#result'));
+				$('<div class="alert alert-danger"> <strong>No existe ninguna lista de la que seas creador con ese id</strong></div>').appendTo($('#resultlistasxid'));
 	});
 
 }
