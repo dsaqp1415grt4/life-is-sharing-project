@@ -21,13 +21,16 @@ $(document).ready(function(){
 	getListsfromUser(url);
 });
 
-//Get
+//Get info completa de una lista
 
 $("#button_getalistaxid").click(function(e){
     e.preventDefault();
-    getGamebyid($("#idlista").val());
+    getListabyid($("#idlista").val());
+    getItemsbylistaid($("#idlista").val());
 //}
 });
+
+
 
 //List
 function getListsfromUser(url) {
@@ -69,7 +72,7 @@ function getListsfromUser(url) {
 
 //Get 
 function getListabyid(listaid) {
-	var url = API_BASE_URL + '/lista/' + listaid;
+	var url = API_BASE_URL + '/listas/' + listaid;
 	$("#resultlistasxid").text('');
 
 	$.ajax({
@@ -81,17 +84,48 @@ function getListabyid(listaid) {
 
 				var listaxid = data;
 
-				$('<br><strong>Nombre:' + lisxidta.nombre + '</strong><br>').appendTo($("#resultlistasxid"));
-				$('<strong> Creador: </strong> ' + listaxid.creador + '<br>').appendTo($("#resultlistasxid"));
+				$('<br><br><strong>			Nombre: ' + listaxid.nombre + '</strong><br>').appendTo($("#resultlistasxid"));
+				$('<strong>			Creador: </strong> ' + listaxid.creador + '<br>').appendTo($("#resultlistasxid"));
 				//$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
-				$('<strong> fecha: </strong> ' + listaxid.fecha_creacion + '<br>').appendTo($("#resultlistasxid"));
-                $('<strong>ultima_mod: </strong>' + listaxid.ultima_modificacion + '<br>').appendTo($("#resultlistasxid"));
+				$('<strong>			Fecha: </strong> ' + listaxid.fecha_creacion + '<br>').appendTo($("#resultlistasxid"));
+                $('<strong>			Ultima modificación: </strong>' + listaxid.ultima_modificacion + '<br><br>').appendTo($("#resultlistasxid"));
 
 			}).fail(function() {
-				$('<div class="alert alert-danger"> <strong>No existe ninguna lista de la que seas creador con ese id</strong></div>').appendTo($('#resultlistasxid'));
+				$('<br><br><div class="alert alert-danger"> <strong>No existe ninguna lista de la que seas editor con ese id</strong></div>').appendTo($('#resultlistasxid'));
 	});
 
 }
+
+//Get items de la lista
+
+function getItemsbylistaid(listaid) {
+	var url = API_BASE_URL + '/listas/' + listaid + '/items';
+	$("#resultitemsxid").text('');
+
+	$.ajax({
+		url : url,
+		type : 'GET',
+		crossDomain : true,
+		dataType : 'json',
+	}).done(function(data, status, jqxhr) {
+		var items = data;
+		$.each(items, function(i, v) {
+				var item = v;
+				$.each(item, function(i,v){
+					var item = v;
+					
+					$('<strong>			> ' + item.description + '</strong><br>').appendTo($("#resultitemsxid"));
+					//$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
+					// ID Item pensarlo bien si hace falta o no, en principio no
+				})
+
+		})	
+	}).fail(function() {
+					$('<br><br><div class="alert alert-danger"> <strong>Lista vacía</strong></div>').appendTo($('#resultitemsxid'));
+	});
+	
+}
+
 
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
