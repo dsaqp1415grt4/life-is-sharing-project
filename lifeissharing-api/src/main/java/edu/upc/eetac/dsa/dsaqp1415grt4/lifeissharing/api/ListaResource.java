@@ -147,8 +147,12 @@ public class ListaResource {
 		// Create CacheControl
 		CacheControl cc = new CacheControl();
 		//Falta acabar de pulir el validateeditor
-		Editores editor = new Editores();
+		//System.out.println(idlista);
+		//System.out.println("ABUBDUDF");
+		Editores editor = getEditorbyusername(idlista);
+		
 		validateEditor(editor);
+		System.out.println("EDITOR RETORNADO= " + editor.getUsername());
 		Lista lista = getListaFromDatabase(idlista);
 
 		// Calculate the ETag on last modified date of user resource
@@ -356,16 +360,17 @@ public class ListaResource {
 	}
 	
 	private void validateEditor(Editores editor){
-		//System.out.println(security.getUserPrincipal().getName());
-		//System.out.println(editor.getUsername());
+		System.out.println(security.getUserPrincipal().getName());
+		System.out.println(editor.getUsername());
 		//Añadir bucle para que compare con todos los editores de la lista
+		
 		if (!(security.getUserPrincipal().getName().equals(editor.getUsername()))){
 			//System.out.println("HOLALALAAL");
 			throw new ForbiddenException("No eres editor de la lista.");
 		}
 			
 			
-		}
+	}
 
 
 private String INSERT_EDITOR_QUERY = "insert into editores(username, idlista) values (?,?)";
@@ -432,6 +437,9 @@ private String GET_ITEMS_QUERY = "select * from item where item.id = ?";
 public ItemCollection getItems(@PathParam("idlista") String id) {
 	ItemCollection items = new ItemCollection();
 	
+	Editores editor = getEditorbyusername(id);
+	
+	validateEditor(editor);
 	Connection conn = null;
 	try {
 		conn = ds.getConnection();
@@ -712,6 +720,59 @@ public Item updateItem(@PathParam("idlista") String id,
 		
 			}
 		return editores;
+		
+	}
+	
+	
+	//Get Editor por username
+	
+private String GET_EDITOR_BY_USERNAME_QUERY = "select username from editores where editores.idlista=? and editores.username like ?";
+	
+	@GET
+	@Path("/{idlista}/editores")
+	@Produces(MediaType.LIFE_API_EDITORES)
+	public Editores getEditorbyusername(@PathParam("idlista") String id){
+
+			Editores editor = new Editores();
+			Connection conn = null;
+			try {
+				conn = ds.getConnection();
+			} catch (SQLException e) {
+				throw new ServerErrorException("Could not connect to the database",
+						Response.Status.SERVICE_UNAVAILABLE);
+			}
+			PreparedStatement stmt = null;
+			try {
+				stmt = conn.prepareStatement(GET_EDITOR_BY_USERNAME_QUERY);
+				stmt.setInt(1, Integer.valueOf(id));	
+				String nombre =  security.getUserPrincipal().getName();
+
+				stmt.setString(2, nombre);
+				//System.out.println("Stmt: " + stmt);	
+
+				ResultSet rs = stmt.executeQuery();
+
+				while (rs.next()) {
+					
+					editor.setUsername(rs.getString("username"));
+					//System.out.println("Editor: " + editor.getUsername());	
+				} 				
+
+				
+			} catch (SQLException e) {
+				throw new ServerErrorException(e.getMessage(),
+						Response.Status.INTERNAL_SERVER_ERROR);
+			} finally {
+				try {
+					if (stmt != null)
+						stmt.close();
+					conn.close();
+				} catch (SQLException e) {
+				}
+		
+			}
+			//System.out.println("Editor: " + editor.getUsername());
+		return editor;
 		
 	}
 	
