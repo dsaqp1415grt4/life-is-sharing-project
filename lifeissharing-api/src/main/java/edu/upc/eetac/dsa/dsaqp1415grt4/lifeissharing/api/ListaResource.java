@@ -146,13 +146,10 @@ public class ListaResource {
 			@Context Request request) {
 		// Create CacheControl
 		CacheControl cc = new CacheControl();
-		//Falta acabar de pulir el validateeditor
-		//System.out.println(idlista);
-		//System.out.println("ABUBDUDF");
+	
 		Editores editor = getEditorbyusername(idlista);
 		
 		validateEditor(editor);
-		System.out.println("EDITOR RETORNADO= " + editor.getUsername());
 		Lista lista = getListaFromDatabase(idlista);
 
 		// Calculate the ETag on last modified date of user resource
@@ -360,12 +357,8 @@ public class ListaResource {
 	}
 	
 	private void validateEditor(Editores editor){
-		System.out.println(security.getUserPrincipal().getName());
-		System.out.println(editor.getUsername());
-		//Añadir bucle para que compare con todos los editores de la lista
 		
 		if (!(security.getUserPrincipal().getName().equals(editor.getUsername()))){
-			//System.out.println("HOLALALAAL");
 			throw new ForbiddenException("No eres editor de la lista.");
 		}
 			
@@ -748,14 +741,12 @@ private String GET_EDITOR_BY_USERNAME_QUERY = "select username from editores whe
 				String nombre =  security.getUserPrincipal().getName();
 
 				stmt.setString(2, nombre);
-				//System.out.println("Stmt: " + stmt);	
-
+			
 				ResultSet rs = stmt.executeQuery();
 
 				while (rs.next()) {
 					
 					editor.setUsername(rs.getString("username"));
-					//System.out.println("Editor: " + editor.getUsername());	
 				} 				
 
 				
@@ -771,7 +762,6 @@ private String GET_EDITOR_BY_USERNAME_QUERY = "select username from editores whe
 				}
 		
 			}
-			//System.out.println("Editor: " + editor.getUsername());
 		return editor;
 		
 	}
