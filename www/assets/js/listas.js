@@ -92,7 +92,7 @@ function getListabyid(listaid) {
                 $('<strong>			Ultima modificación: </strong>' + listaxid.ultima_modificacion + '<br><br>').appendTo($("#resultlistasxid"));
  
          getItemsbylistaid($("#idlista").val());
-         getEditoresdelistaid($("idlista").val());
+         getEditoresdelistaid($("#idlista").val());
 			}).fail(function() {
 				$('<br><br><div class="alert alert-danger"> <strong>No existe ninguna lista de la que seas editor con ese id</strong></div>').appendTo($('#resultlistasxid'));
         $("#resultitemsxid").text('');
@@ -147,6 +147,7 @@ function getEditoresdelistaid(listaid) {
 		var editores = data;
 		$.each(editores, function(i, v) {
 				var editor = v;
+				$('<br><strong>			Editores: </strong><br>').appendTo($("#resulteditoresxid"));
 				$.each(editor, function(i,v){
 					var editor = v;
 					
