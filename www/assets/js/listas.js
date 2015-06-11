@@ -26,11 +26,12 @@ $(document).ready(function(){
 $("#button_getalistaxid").click(function(e){
     e.preventDefault();
     getListabyid($("#idlista").val());
-    getItemsbylistaid($("#idlista").val());
-//}
 });
 
 
+//$("#boton_crear_lista").click(function(e){
+//    e.preventDefault();
+//}
 
 //List
 function getListsfromUser(url) {
@@ -89,9 +90,13 @@ function getListabyid(listaid) {
 				//$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
 				$('<strong>			Fecha: </strong> ' + listaxid.fecha_creacion + '<br>').appendTo($("#resultlistasxid"));
                 $('<strong>			Ultima modificación: </strong>' + listaxid.ultima_modificacion + '<br><br>').appendTo($("#resultlistasxid"));
-
+ 
+         getItemsbylistaid($("#idlista").val());
+         getEditoresdelistaid($("idlista").val());
 			}).fail(function() {
 				$('<br><br><div class="alert alert-danger"> <strong>No existe ninguna lista de la que seas editor con ese id</strong></div>').appendTo($('#resultlistasxid'));
+        $("#resultitemsxid").text('');
+        $("#resulteditoresxid").text('');
 	});
 
 }
@@ -118,14 +123,42 @@ function getItemsbylistaid(listaid) {
 					//$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
 					// ID Item pensarlo bien si hace falta o no, en principio no
 				})
-
-		})	
+		})
+        //hay que arreglar esto
+       
 	}).fail(function() {
-					$('<br><br><div class="alert alert-danger"> <strong>Lista vacía</strong></div>').appendTo($('#resultitemsxid'));
+					$('<br><br><div class="alert alert-danger"> <strong>Lista sin items</strong></div>').appendTo($('#resultitemsxid'));
 	});
 	
 }
 
+//Get Editores de una lista
+
+function getEditoresdelistaid(listaid) {
+	var url = API_BASE_URL + '/listas/'+ listaid +'/editores';
+	$("#resulteditoresxid").text('');
+
+	$.ajax({
+		url : url,
+		type : 'GET',
+		crossDomain : true,
+		dataType : 'json',
+	}).done(function(data, status, jqxhr) {
+		var editores = data;
+		$.each(editores, function(i, v) {
+				var editor = v;
+				$.each(editor, function(i,v){
+					var editor = v;
+					
+					$('<strong>			> ' + editor.username + '</strong><br>').appendTo($("#resulteditoresxid"));
+					
+				})
+		})
+	}).fail(function() {
+					$('<br><br><div class="alert alert-danger"> <strong>Lista sin editores</strong></div>').appendTo($('#resulteditoresxid'));
+	});
+	
+}
 
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
@@ -144,3 +177,4 @@ function getCookie(cname) {
     }
     return "";
 }
+
