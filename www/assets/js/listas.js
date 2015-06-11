@@ -54,11 +54,11 @@ function getListsfromUser(url) {
 					$.each(lista, function(j,v){
 					
 						var lista = v;
-						$('<br><strong>Nombre:' + lista.nombre + '</strong><br>').appendTo($("#resultlistas"));
+						$('<br><strong> Nombre:' + lista.nombre + '</strong><br>').appendTo($("#resultlistas"));
 						$('<strong> Creador: </strong> ' + lista.creador + '<br>').appendTo($("#resultlistas"));
 						$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
-						$('<strong> fecha: </strong> ' + lista.fecha_creacion + '<br>').appendTo($("#resultlistas"));
-	                    $('<strong>ultima_mod: </strong>' + lista.ultima_modificacion + '<br>').appendTo($("#resultlistas"));
+						$('<strong> Fecha de creación: </strong> ' + lista.fecha_creacion + '<br>').appendTo($("#resultlistas"));
+	                    $('<strong>Última modificación: </strong>' + lista.ultima_modificacion + '<br>').appendTo($("#resultlistas"));
 					})
 					}
 
@@ -75,7 +75,11 @@ function getListsfromUser(url) {
 function getListabyid(listaid) {
 	var url = API_BASE_URL + '/listas/' + listaid;
 	$("#resultlistasxid").text('');
+if(listaid == ""){
+	$('<br><br><div class="alert alert-danger"> <strong>No has introducido ningún valor de ID</strong></div>').appendTo($('#resultlistasxid'));
+}
 
+else{
 	$.ajax({
 		url : url,
 		type : 'GET',
@@ -95,9 +99,10 @@ function getListabyid(listaid) {
          getEditoresdelistaid($("#idlista").val());
 			}).fail(function() {
 				$('<br><br><div class="alert alert-danger"> <strong>No existe ninguna lista de la que seas editor con ese id</strong></div>').appendTo($('#resultlistasxid'));
-        $("#resultitemsxid").text('');
-        $("#resulteditoresxid").text('');
-	});
+				$("#resultitemsxid").text('');
+				$("#resulteditoresxid").text('');
+	});	
+}
 
 }
 
