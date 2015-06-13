@@ -162,16 +162,21 @@ function getItemsbylistaid(listaid) {
 				var item = v;
 				$.each(item, function(i,v){
 					var item = v;
+					if(i == "item"){
+						$('<br><br><div class="alert alert-danger"> <strong>Lista sin items</strong></div>').appendTo($('#resultitemsxid'));
+					}
+					else{
+						$('<strong>			> ' + item.description + '</strong><br>').appendTo($("#resultitemsxid"));
+						//$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
+						// ID Item pensarlo bien si hace falta o no, en principio no
+					}
 					
-					$('<strong>			> ' + item.description + '</strong><br>').appendTo($("#resultitemsxid"));
-					//$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
-					// ID Item pensarlo bien si hace falta o no, en principio no
 				})
 		})
         //hay que arreglar esto
        
 	}).fail(function() {
-					$('<br><br><div class="alert alert-danger"> <strong>Lista sin items</strong></div>').appendTo($('#resultitemsxid'));
+					$('<br><br><div class="alert alert-danger"> <strong>Se ha producido un error al mostrar la lista de ítems </strong></div>').appendTo($('#resultitemsxid'));
 	});
 	
 }
