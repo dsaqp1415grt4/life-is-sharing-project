@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.dsaqp1415grt4.lifeissharing.api;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -104,7 +105,10 @@ public class ListaResource {
 					Response.Status.SERVICE_UNAVAILABLE);
 		}
 		PreparedStatement stmt = null;
+		
+		
 		try {
+	
 			stmt = conn.prepareStatement(GET_LISTASUSUARIO_QUERY);
 			stmt.setString(1, security.getUserPrincipal().getName());
 			ResultSet rs = stmt.executeQuery();
@@ -121,7 +125,11 @@ public class ListaResource {
 		} catch (SQLException e) {
 			throw new ServerErrorException(e.getMessage(),
 					Response.Status.INTERNAL_SERVER_ERROR);
-		} finally {
+			
+		}
+			
+		finally {
+		
 			try {
 				if (stmt != null)
 					stmt.close();
