@@ -820,7 +820,7 @@ private String GET_EDITOR_BY_USERNAME_QUERY = "select username from editores whe
 		
 	}
 	
-	/* BORRAR UN EDITOR*/  //OK
+	/* BORRAR UN EDITOR*/  
 
 	private String DELETE_EDITOR_QUERY = "delete from editores where editores.username=? and editores.idlista = ?";
 
