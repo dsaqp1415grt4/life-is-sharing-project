@@ -32,44 +32,45 @@ $("#button_getalistaxid").click(function(e){
 
 $("#button_crear_lista").click(function(e){
     e.preventDefault();
-    if($("#crear_nombre_de_la_lista").val() == ""){
-    	$('<br><br><div class="alert alert-danger"> <strong>No has introducido ningún nombre a la lista</strong></div>').appendTo($('#create_result'));  	
+    $('#create_result').text('');
+    var now = new Date().getTime();
+    if($("#crear_nombre_lista").val() == ""){
+    	$('<br><br><div class="alert alert-danger"> <strong>No has introducido ningún nombre a la lista</strong></div>').appendTo($('#create_result'));
+    	$('<br><br><div class="alert alert-danger"> <strong>'+now+'</strong></div>').appendTo($('#create_result'));
     }
     else{
-    	var newlista = new Object();
-        newlista.nombre = $("#crear_nombre_de_la_lista").val();
+        $('<br><br><div class="alert alert-success"> <strong>Estas creando una lista</strong></div>').appendTo($("#create_result"));
+    	/*var newlista = new Object();
+        newlista.nombre = $("#crear_nombre_lista").val();
         newlista.creador =
         newlista.idlista = 
-        newlista.fecha_creacion =
-        newlista.ultima_modificacion =
-    	$("#create_result").text('ha funcionado bien');
-        createlista(newlista);
+        newlista.fecha_creacion = now;
+        newlista.ultima_modificacion = now;
+        createlista(newlista);*/
     }
 });
 
-//Put lista
+//Put item de una lista
 
-$("#button_put").click(function(e){
+/*$("#button_update_item").click(function(e){
     e.preventDefault();
-   $("#result").text('');
-if($("#file_name").val() == "" || $("#url").val() == "")
+   $("#update_result").text('');
+    var now = new Date().getTime();
+if($("#update_item_lista").val() == "")
 {
-     $('<div class="alert alert-success">  Algún campo requerido <strong>no está rellenado</strong></div>').appendTo($("#result"));
+    $('<br><br><div class="alert alert-danger"> <strong>No has introducido ningún nombre al ítem</strong></div>').appendTo($('#update_result'));  
 }
 
    else{
-   var newResource = new Object();
-	newResource.name = $("#file_name").val();
-	newResource.url = $("#url").val();
-   newResource.description = $("#descripcion").val();
-	newResource.taglist = $("#tags").val();
-	newResource.creationdate = $("#fecha").val();
-   newResource.size = $("#tamano").val();
-	
-	updateResource(newResource);
+   var updateitem = new Object();
+   var updatelista = new Object();
+       updateitem.description = $("#update_nombre_item").val();
+       $("#update_result").text(now);
+       updatelista.ultima_modificacion = now;	
+	   updateitem(updatelista);
    }
 
-});
+});*/
 
 //List
 function getListsfromUser(url) {
@@ -226,11 +227,11 @@ function createLista(newlista){
 
 }
 
-//Actualizar la lista
+//Actualizar item de una lista
 
-function updateResource(file) {
-	var url = API_BASE_URL + '/file/' + file.name;
-	var data = JSON.stringify(file);
+/*function updateResource(lista) {
+	var url = API_BASE_URL + '/listas/' + file.name;
+	var data = JSON.stringify(lista);
 
 	$("#result").text('');
 
@@ -246,17 +247,16 @@ function updateResource(file) {
     	}
 	}).done(function(data, status, jqxhr) {
 		$('<div class="alert alert-success"> <strong>Ok!</strong> Repository Updated</div>').appendTo($("#result"));
-        $('<br><strong> Name: ' + file.name + '</strong><br>').appendTo($('#result'));
-        $('<strong> URL: </strong> ' + file.url + '<br>').appendTo($('#result'));
-		$('<strong> Description: </strong> ' + file.description + '<br>').appendTo($('#result'));
-        $('<strong>Size: </strong>' + file.size + '<br>').appendTo($('#result'));
-        $('<strong>Creation Date: </strong>' + file.creationdate + '<br>').appendTo($('#result'));
-                $('<strong>Taglist: </strong>' + file.taglist + '<br>').appendTo($('#result'));
+		$('<br><br><strong>			Nombre: ' + lista.nombre + '</strong><br>').appendTo($("#resultlistasxid"));
+		$('<strong>			Creador: </strong> ' + lista.creador + '<br>').appendTo($("#resultlistasxid"));
+		$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
+		$('<strong>			Fecha: </strong> ' + lista.fecha_creacion + '<br>').appendTo($("#resultlistasxid"));
+        $('<strong>			Ultima modificación: </strong>' + lista.ultima_modificacion + '<br><br>').appendTo($("#resultlistasxid"));
   	}).fail(function() {
 		$('<div class="alert alert-danger"> <strong>Oh!</strong> Error </div>').appendTo($("#result"));
 	});
 
-}
+}*/
 
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
