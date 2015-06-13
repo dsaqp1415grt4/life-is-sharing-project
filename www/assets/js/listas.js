@@ -253,8 +253,8 @@ else{
                 var dateTime2 = new Date(listaxid.ultima_modificacion);
 	            $('<strong>			Última modificación: </strong>' + dateTime2.toLocaleTimeString() +'   '+ dateTime2.toLocaleDateString()+ '<br>').appendTo($("#resultlistasxid"));
  
-         getItemsbylistaid(id_lista);
-         getEditoresdelistaid(id_lista);
+         getItemsbylistaid($("#idlista").val());
+         getEditoresdelistaid($("#idlista").val());
 			}).fail(function() {
 				$('<br><br><div class="alert alert-danger"> <strong>No existe ninguna lista de la que seas editor con ese id</strong></div>').appendTo($('#resultlistasxid'));
 				$("#resultitemsxid").text('');
