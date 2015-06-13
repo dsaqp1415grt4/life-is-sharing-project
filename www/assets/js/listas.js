@@ -28,10 +28,16 @@ $("#button_getalistaxid").click(function(e){
     getListabyid($("#idlista").val());
 });
 
+//Post lista
+$("#boton_crear_lista").click(function(e){
+    e.preventDefault();
 
-//$("#boton_crear_lista").click(function(e){
-//    e.preventDefault();
-//}
+    var newlista = new Object();
+    newlista.nombre = $("").val();
+    newlista.
+    
+    createlista(newlista);
+}
 
 //List
 function getListsfromUser(url) {
@@ -164,6 +170,28 @@ function getEditoresdelistaid(listaid) {
 					$('<br><br><div class="alert alert-danger"> <strong>Lista sin editores</strong></div>').appendTo($('#resulteditoresxid'));
 	});
 	
+}
+
+// Crear lista nueva
+
+function createLista(newlista){
+	var url = API_BASE_URL + '/listas';
+	var data = JSON.stringify(newlista);
+
+	$("#create_result").text('');
+
+	$.ajax({
+		url : url,
+		type : 'POST',
+		crossDomain : true,
+		dataType : 'json',
+		data : data,
+	}).done(function(data, status, jqxhr) {
+		$('<div class="alert alert-success"> <strong>Ok!</strong> Lista creada con éxito</div>').appendTo($("#create_result"));				
+  	}).fail(function() {
+		$('<div class="alert alert-danger"> <strong>Oh!</strong> Se ha producido un error </div>').appendTo($("#create_result"));
+	});
+
 }
 
 function setCookie(cname, cvalue, exdays) {
