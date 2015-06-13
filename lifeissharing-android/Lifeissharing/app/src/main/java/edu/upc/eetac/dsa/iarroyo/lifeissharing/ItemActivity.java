@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 import edu.upc.eetac.dsa.iarroyo.lifeissharing.api.AppException;
@@ -79,7 +81,8 @@ public class ItemActivity extends ListActivity{
         @Override
         protected void onPostExecute(ItemCollection result) {
             addItems(result);
-            setListAdapter(adapter);
+
+
             if (pd != null) {
                 pd.dismiss();
             }
@@ -128,6 +131,22 @@ public class ItemActivity extends ListActivity{
         }
     }
 
+    private final static int WRITE_ACTIVITY = 0;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case WRITE_ACTIVITY:
+                if (resultCode == RESULT_OK) {
+                    Bundle res = data.getExtras();
+                    String jsonItem = res.getString("items");
+                    Item item = new Gson().fromJson(jsonItem, Item.class);
+                    itemList.add(0, item);
+                    adapter.notifyDataSetChanged();
+                }
+                break;
+        }
+    }
 
 
 }
