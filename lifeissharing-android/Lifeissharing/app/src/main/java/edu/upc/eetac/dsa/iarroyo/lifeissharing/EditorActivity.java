@@ -43,7 +43,7 @@ public class EditorActivity extends ListActivity{
         (new FetchEditoresTask()).execute(urlEditores);
     }
 
-    private void addItems(EditorCollection editores){
+    private void addEditores(EditorCollection editores){
         editorList.addAll(editores.getEditores());
         adapter.notifyDataSetChanged();
 
@@ -72,7 +72,7 @@ public class EditorActivity extends ListActivity{
 
         @Override
         protected void onPostExecute(EditorCollection result) {
-            addItems(result);
+            addEditores(result);
             if (pd != null) {
                 pd.dismiss();
             }

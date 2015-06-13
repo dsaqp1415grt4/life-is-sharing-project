@@ -146,6 +146,7 @@ public class ListaResource {
 			@Context Request request) {
 		// Create CacheControl
 		CacheControl cc = new CacheControl();
+		
 	
 		Editores editor = getEditorbyusername(idlista);
 		
@@ -721,10 +722,8 @@ public Item updateItem(@PathParam("idlista") String id,
 	
 private String GET_EDITOR_BY_USERNAME_QUERY = "select username from editores where editores.idlista=? and editores.username like ?";
 	
-	@GET
-	@Path("/{idlista}/editores")
-	@Produces(MediaType.LIFE_API_EDITORES)
-	public Editores getEditorbyusername(@PathParam("idlista") String id){
+
+	public Editores getEditorbyusername(String id){
 
 			Editores editor = new Editores();
 			Connection conn = null;

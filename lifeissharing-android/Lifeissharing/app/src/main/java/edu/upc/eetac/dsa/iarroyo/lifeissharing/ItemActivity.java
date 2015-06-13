@@ -69,6 +69,7 @@ public class ItemActivity extends ListActivity{
                         .getItems(params[0]);
 
 
+
             } catch (AppException e) {
                 e.printStackTrace();
             }
@@ -78,6 +79,7 @@ public class ItemActivity extends ListActivity{
         @Override
         protected void onPostExecute(ItemCollection result) {
             addItems(result);
+            setListAdapter(adapter);
             if (pd != null) {
                 pd.dismiss();
             }
