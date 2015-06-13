@@ -33,20 +33,20 @@ $("#button_getalistaxid").click(function(e){
 $("#button_crear_lista").click(function(e){
     e.preventDefault();
     $('#create_result').text('');
-    var now = new Date().getTime();
+    //var now = new Date().getTime();
     if($("#crear_nombre_lista").val() == ""){
     	$('<br><br><div class="alert alert-danger"> <strong>No has introducido ningún nombre a la lista</strong></div>').appendTo($('#create_result'));
     	$('<br><br><div class="alert alert-danger"> <strong>'+now+'</strong></div>').appendTo($('#create_result'));
     }
     else{
         $('<br><br><div class="alert alert-success"> <strong>Estas creando una lista</strong></div>').appendTo($("#create_result"));
-    	/*var newlista = new Object();
-        newlista.nombre = $("#crear_nombre_lista").val();
-        newlista.creador =
-        newlista.idlista = 
-        newlista.fecha_creacion = now;
-        newlista.ultima_modificacion = now;
-        createlista(newlista);*/
+    	var newlista = new Object();
+    	//newlista.creador = USERNAME;
+        //newlista.fecha_creacion = now;
+        //newlista.idlista = 
+    	newlista.nombre = $("#crear_nombre_lista").val();
+        //newlista.ultima_modificacion = now;
+        createLista(newlista);
     }
 });
 
@@ -62,12 +62,12 @@ if($("#update_item_lista").val() == "")
 }
 
    else{
-   var updateitem = new Object();
-   var updatelista = new Object();
-       updateitem.description = $("#update_nombre_item").val();
-       $("#update_result").text(now);
-       updatelista.ultima_modificacion = now;	
-	   updateitem(updatelista);
+   		var updateitem = new Object();
+   		var updatelista = new Object();
+       	updateitem.description = $("#update_nombre_item").val();
+       	$("#update_result").text(now);
+       	updatelista.ultima_modificacion = now;	
+	   	updateitem(updatelista);
    }
 
 });*/
@@ -218,11 +218,13 @@ function createLista(newlista){
 		type : 'POST',
 		crossDomain : true,
 		dataType : 'json',
+		contentType : "application/vnd.life.api.lista+json; charset=utf-8",
 		data : data,
 	}).done(function(data, status, jqxhr) {
-		$('<div class="alert alert-success"> <strong>Ok!</strong> Lista creada con éxito</div>').appendTo($("#create_result"));				
+		$('<div class="alert alert-success"> <strong>Ok!</strong>Lista creada con éxito</div>').appendTo($("#create_result"));
+		
   	}).fail(function() {
-		$('<div class="alert alert-danger"> <strong>Oh!</strong> Se ha producido un error </div>').appendTo($("#create_result"));
+		$('<div class="alert alert-danger"> <strong>Se ha producido un error</strong> </div>').appendTo($("#create_result"));
 	});
 
 }
