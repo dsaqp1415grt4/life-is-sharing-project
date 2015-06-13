@@ -33,20 +33,28 @@ $("#button_getalistaxid").click(function(e){
 $("#button_crear_lista").click(function(e){
     e.preventDefault();
     $('#create_result').text('');
-    //var now = new Date().getTime();
     if($("#crear_nombre_lista").val() == ""){
     	$('<br><br><div class="alert alert-danger"> <strong>No has introducido ningún nombre a la lista</strong></div>').appendTo($('#create_result'));
-    	$('<br><br><div class="alert alert-danger"> <strong>'+now+'</strong></div>').appendTo($('#create_result'));
     }
     else{
         $('<br><br><div class="alert alert-success"> <strong>Estas creando una lista</strong></div>').appendTo($("#create_result"));
     	var newlista = new Object();
-    	//newlista.creador = USERNAME;
-        //newlista.fecha_creacion = now;
-        //newlista.idlista = 
     	newlista.nombre = $("#crear_nombre_lista").val();
-        //newlista.ultima_modificacion = now;
         createLista(newlista);
+    }
+});
+
+$("#button_crear_item").click(function(e){
+    e.preventDefault();
+    $('#create_item_result').text('');
+    if($("#crear_nombre_lista").val() == ""){
+    	$('<br><br><div class="alert alert-danger"> <strong>No has introducido ningún nombre a la lista</strong></div>').appendTo($('#create_item_result'));
+    }
+    else{
+        $('<br><br><div class="alert alert-success"> <strong>Estas creando un item</strong></div>').appendTo($("#create_item_result"));
+    	var newitem = new Object(); 
+    	newitem.description = $("#crear_nombre_item").val();
+    	createitem(newitem);
     }
 });
 
@@ -93,7 +101,7 @@ function getListsfromUser(url) {
 					$.each(lista, function(j,v){
 					
 						var lista = v;
-						$('<br><strong> Nombre:' + lista.nombre + '</strong><br>').appendTo($("#resultlistas"));
+						$('<br><strong> Nombre: <button class="btn btn-link btn-xs" type="button" id="button_getalistaxid" >' + lista.nombre + '</strong></button><br>').appendTo($("#resultlistas"));
 						$('<strong> Creador: </strong> ' + lista.creador + '<br>').appendTo($("#resultlistas"));
 						$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
 						$('<strong> Fecha de creación: </strong> ' + lista.fecha_creacion + '<br>').appendTo($("#resultlistas"));
@@ -166,7 +174,7 @@ function getItemsbylistaid(listaid) {
 						$('<br><br><div class="alert alert-danger"> <strong>Lista sin items</strong></div>').appendTo($('#resultitemsxid'));
 					}
 					else{
-						$('<strong>			> ' + item.description + '</strong><br>').appendTo($("#resultitemsxid"));
+						$('<strong>			> ' + item.description + '</strong>     <button class="btn btn-link btn-xs" type="button" id="enlace_editar_items" ><i class="fa fa-pencil"></i>    </button> <button class="btn btn-link btn-xs" type="button" id="enlace_eliminar_items" ><i class="fa fa-trash-o"></i></button><br>').appendTo($("#resultitemsxid"));
 						//$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
 						// ID Item pensarlo bien si hace falta o no, en principio no
 					}
@@ -234,9 +242,33 @@ function createLista(newlista){
 
 }
 
+//Crear un item en una lista
+
+function createitem(newitem){
+	var url = API_BASE_URL + '/listas'+idlista+'/items';
+	var data = JSON.stringify(newitem);
+
+	$("#create_result").text('');
+
+	$.ajax({
+		url : url,
+		type : 'POST',
+		crossDomain : true,
+		dataType : 'json',
+		contentType : "application/vnd.life.api.lista.collection+json; charset=utf-8",
+		data : data,
+	}).done(function(data, status, jqxhr) {
+		$('<div class="alert alert-success"><strong>Item añadido a la lista con éxito</strong></div>').appendTo($("#create_result"));
+		
+  	}).fail(function() {
+		$('<div class="alert alert-danger"> <strong>Se ha producido un error</strong> </div>').appendTo($("#create_result"));
+	});
+
+}
+
 //Actualizar item de una lista
 
-/*function updateResource(lista) {
+/*function updateItem(lista) {
 	var url = API_BASE_URL + '/listas/' + file.name;
 	var data = JSON.stringify(lista);
 
