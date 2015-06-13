@@ -21,6 +21,7 @@ select sleep(1);insert into lista(nombre, creador) values ('Compra Casa', 'Nacho
 select sleep(1);insert into lista(nombre, creador) values ('MediaMarkt', 'DavidArroyo');
 select sleep(1);insert into lista(nombre, creador) values ('Empresa', 'JosepLopez');
 select sleep(1);insert into lista(nombre, creador) values ('Vacaciones', 'NachoTelematic');
+select sleep(1);insert into lista(nombre, creador) values ('Asesinato', 'NachoTelematic');
 
 
 insert into editores(username, idlista) values ('paco2015',1);
@@ -28,6 +29,7 @@ insert into editores(username, idlista) values ('paco2015',1);
 insert into editores(username, idlista) values ('NachoTelematic',2);
 insert into editores(username, idlista) values ('paco2015',2);
 insert into editores(username, idlista) values ('AngelSupervia',2);
+
 
 insert into editores(username, idlista) values ('AngelSupervia',3);
 insert into editores(username, idlista) values ('DavidArroyo',3);
@@ -51,7 +53,8 @@ insert into editores(username, idlista) values ('jorge_messi',8);
 insert into editores(username, idlista) values ('NachoTelematic',8);
 insert into editores(username, idlista) values ('AngelSupervia',8);
 
-
+insert into editores(username, idlista) values ('NachoTelematic',9);
+insert into editores(username, idlista) values ('DavidArroyo',9);
 
 insert into item(description,id) values ('Cocacola',1);
 insert into item(description,id) values ('Cerveza',1);
@@ -95,3 +98,5 @@ insert into item(description,id) values ('Toalla',8);
 insert into item(description,id) values ('Chanclas',8);
 insert into item(description,id) values ('Camisetas',8);
 insert into item(description,id) values ('Pantalones',8);
+
+

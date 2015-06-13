@@ -149,6 +149,7 @@ else{
 
 function getItemsbylistaid(listaid) {
 	var url = API_BASE_URL + '/listas/' + listaid + '/items';
+	
 	$("#resultitemsxid").text('');
 
 	$.ajax({
@@ -160,17 +161,14 @@ function getItemsbylistaid(listaid) {
 		var items = data;
 		$.each(items, function(i, v) {
 				var item = v; //item = []
-				if("item = []"){
-					$('<br><br><div class="alert alert-danger"> <strong>No hay items en la lista </strong></div>').appendTo($('#resultitemsxid'));
-				}
-				else{
-					$('<br><strong>			Items: </strong><br>').appendTo($("#resultitemsxid"));
+				
+					//$('<br><strong>			Items: </strong><br>').appendTo($("#resultitemsxid"));
 					$.each(item, function(i,v){
 						var item = v;
 						
 						$('<strong>			> ' + item.description + '</strong><br>').appendTo($("#resultitemsxid"));					
 					})
-				}	
+					
 		})
 		
 	}).fail(function() {
