@@ -8,10 +8,12 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
@@ -42,6 +44,7 @@ public class LifeMainActivity extends ListActivity {
         SharedPreferences prefs = getSharedPreferences("life-profile", Context.MODE_PRIVATE);
         final String username = prefs.getString("username",null);
         final String password = prefs.getString("password", null);
+
         Authenticator.setDefault(new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password
@@ -75,7 +78,16 @@ public class LifeMainActivity extends ListActivity {
 
         @Override
         protected void onPostExecute(ListaCollection result) {
-            addListas(result);
+            if(result == null){
+
+                Toast toast = Toast.makeText(LifeMainActivity.this, "Has de introducir username y password", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                toast.show();
+
+            }else {
+                addListas(result);
+            }
+
             if (pd != null) {
                 pd.dismiss();
             }

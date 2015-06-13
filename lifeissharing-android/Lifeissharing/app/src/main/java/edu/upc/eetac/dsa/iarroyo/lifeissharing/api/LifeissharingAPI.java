@@ -1,8 +1,11 @@
 package edu.upc.eetac.dsa.iarroyo.lifeissharing.api;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +19,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 import java.util.Properties;
+
+import edu.upc.eetac.dsa.iarroyo.lifeissharing.LifeMainActivity;
+import edu.upc.eetac.dsa.iarroyo.lifeissharing.LoginActivity;
 
 /**
  * Created by nacho on 30/05/15.
@@ -64,7 +70,7 @@ public class LifeissharingAPI {
             urlConnection.connect();
         } catch (IOException e) {
             throw new AppException(
-                    "Can't connect to Books API Web Service");
+                    "Can't connect to Life API Web Service");
         }
 
         BufferedReader reader;
@@ -82,9 +88,9 @@ public class LifeissharingAPI {
             parseLinks(jsonLinks, rootAPI.getLinks());
         } catch (IOException e) {
             throw new AppException(
-                    "Can't get response from Books API Web Service");
+                    "Can't get response from Life API Web Service");
         } catch (JSONException e) {
-            throw new AppException("Error parsing Book Root API");
+            throw new AppException("Error parsing Life Root API");
         }
 
     }
@@ -113,6 +119,7 @@ public class LifeissharingAPI {
 
     public ListaCollection getListas() throws AppException {
         Log.d(TAG, "getListas()");
+
         ListaCollection listas = new ListaCollection();
 
         HttpURLConnection urlConnection = null;
@@ -122,10 +129,15 @@ public class LifeissharingAPI {
             urlConnection.setRequestMethod("GET");
             urlConnection.setDoInput(true);
             urlConnection.connect();
+
+
+
+
         } catch (IOException e) {
             throw new AppException(
-                    "Can't connect to Books API Web Service");
+                    "Can't connect to Life API Web Service");
         }
+
 
         BufferedReader reader;
         try {
@@ -160,10 +172,12 @@ public class LifeissharingAPI {
             }
         } catch (IOException e) {
             throw new AppException(
-                    "Can't get response from Books API Web Service");
+                    "Can't get response from Life API Web Service");
         } catch (JSONException e) {
-            throw new AppException("Error parsing Books Root API");
+            throw new AppException("Error parsing Life Root API");
         }
+
+
 
         return listas;
     }
@@ -181,7 +195,7 @@ public class LifeissharingAPI {
             urlConnection.connect();
         } catch (IOException e) {
             throw new AppException(
-                    "Can't connect to Books API Web Service");
+                    "Can't connect to Life API Web Service");
         }
 
         BufferedReader reader;
@@ -214,9 +228,9 @@ public class LifeissharingAPI {
             }
         } catch (IOException e) {
             throw new AppException(
-                    "Can't get response from Books API Web Service");
+                    "Can't get response from Life API Web Service");
         } catch (JSONException e) {
-            throw new AppException("Error parsing Books Root API");
+            throw new AppException("Error parsing Life Root API");
         }
 
         return items;
@@ -369,7 +383,7 @@ public class LifeissharingAPI {
             urlConnection.connect();
         } catch (IOException e) {
             throw new AppException(
-                    "Can't connect to Books API Web Service");
+                    "Can't connect to Life API Web Service");
         }
 
         BufferedReader reader;
@@ -468,6 +482,75 @@ public class LifeissharingAPI {
 
         return jsonEditor;
     }
+
+
+
+    public User getLogin(String username, String password) throws AppException {
+        Log.d(TAG, "Login()");
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+
+
+        HttpURLConnection urlConnection = null;
+        try {
+            JSONObject jsonUser = createJsonUser(user);
+
+            String preURL = rootAPI.getLinks().get("self").getTarget();
+            String URL = preURL + "users/login";
+
+
+            urlConnection = (HttpURLConnection) new URL(URL).openConnection();
+
+            urlConnection.setRequestProperty("Accept",
+                    MediaType.LIFE_API_USER);
+            urlConnection.setRequestProperty("Content-Type",
+                    MediaType.LIFE_API_USER);
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+            urlConnection.connect();
+            PrintWriter writer = new PrintWriter(
+                    urlConnection.getOutputStream());
+            writer.println(jsonUser.toString());
+            writer.close();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            jsonUser = new JSONObject(sb.toString());
+
+
+            user.setLoginSuccessful(jsonUser.getBoolean("loginSuccessful"));
+            user.setUsername(jsonUser.getString("username"));
+
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Error parsing response");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new AppException("Error getting response");
+        } finally {
+            if (urlConnection != null)
+                urlConnection.disconnect();
+        }
+
+        return user;
+    }
+
+    private JSONObject createJsonUser(User user) throws JSONException {
+        JSONObject jsonUser = new JSONObject();
+        jsonUser.put("username", user.getUsername());
+        jsonUser.put("password", user.getPassword());
+        jsonUser.put("name", user.getName());
+        jsonUser.put("email", user.getEmail());
+
+        return jsonUser;
+    }
+
 
 
 }
