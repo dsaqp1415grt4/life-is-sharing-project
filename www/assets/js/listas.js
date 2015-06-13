@@ -28,16 +28,48 @@ $("#button_getalistaxid").click(function(e){
     getListabyid($("#idlista").val());
 });
 
-//Post lista
-$("#boton_crear_lista").click(function(e){
-    e.preventDefault();
+//Post Lista
 
-    var newlista = new Object();
-    newlista.nombre = $("").val();
-    newlista.
-    
-    createlista(newlista);
+$("#button_crear_lista").click(function(e){
+    e.preventDefault();
+    if($("#crear_nombre_de_la_lista").val() == ""){
+    	$('<br><br><div class="alert alert-danger"> <strong>No has introducido ningún nombre a la lista</strong></div>').appendTo($('#create_result'));  	
+    }
+    else{
+    	var newlista = new Object();
+        newlista.nombre = $("#crear_nombre_de_la_lista").val();
+        newlista.creador =
+        newlista.idlista = 
+        newlista.fecha_creacion =
+        newlista.ultima_modificacion =
+    	$("#create_result").text('ha funcionado bien');
+        createlista(newlista);
+    }
+});
+
+//Put lista
+
+$("#button_put").click(function(e){
+    e.preventDefault();
+   $("#result").text('');
+if($("#file_name").val() == "" || $("#url").val() == "")
+{
+     $('<div class="alert alert-success">  Algún campo requerido <strong>no está rellenado</strong></div>').appendTo($("#result"));
 }
+
+   else{
+   var newResource = new Object();
+	newResource.name = $("#file_name").val();
+	newResource.url = $("#url").val();
+   newResource.description = $("#descripcion").val();
+	newResource.taglist = $("#tags").val();
+	newResource.creationdate = $("#fecha").val();
+   newResource.size = $("#tamano").val();
+	
+	updateResource(newResource);
+   }
+
+});
 
 //List
 function getListsfromUser(url) {
@@ -190,6 +222,38 @@ function createLista(newlista){
 		$('<div class="alert alert-success"> <strong>Ok!</strong> Lista creada con éxito</div>').appendTo($("#create_result"));				
   	}).fail(function() {
 		$('<div class="alert alert-danger"> <strong>Oh!</strong> Se ha producido un error </div>').appendTo($("#create_result"));
+	});
+
+}
+
+//Actualizar la lista
+
+function updateResource(file) {
+	var url = API_BASE_URL + '/file/' + file.name;
+	var data = JSON.stringify(file);
+
+	$("#result").text('');
+
+	$.ajax({
+		url : url,
+		type : 'PUT',
+		crossDomain : true,
+		dataType : 'json',
+		data : data,
+        contentType : "application/json; charset=utf-8",
+		statusCode: {
+    		404: function() {$('<div class="alert alert-danger"> <strong>Oh!</strong> Page not found </div>').appendTo($("#result"));}
+    	}
+	}).done(function(data, status, jqxhr) {
+		$('<div class="alert alert-success"> <strong>Ok!</strong> Repository Updated</div>').appendTo($("#result"));
+        $('<br><strong> Name: ' + file.name + '</strong><br>').appendTo($('#result'));
+        $('<strong> URL: </strong> ' + file.url + '<br>').appendTo($('#result'));
+		$('<strong> Description: </strong> ' + file.description + '<br>').appendTo($('#result'));
+        $('<strong>Size: </strong>' + file.size + '<br>').appendTo($('#result'));
+        $('<strong>Creation Date: </strong>' + file.creationdate + '<br>').appendTo($('#result'));
+                $('<strong>Taglist: </strong>' + file.taglist + '<br>').appendTo($('#result'));
+  	}).fail(function() {
+		$('<div class="alert alert-danger"> <strong>Oh!</strong> Error </div>').appendTo($("#result"));
 	});
 
 }

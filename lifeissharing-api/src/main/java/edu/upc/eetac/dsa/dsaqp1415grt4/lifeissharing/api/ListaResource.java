@@ -89,7 +89,7 @@ public class ListaResource {
 
 	//GET LISTAS DE UN USUARIO OK
 	
-	private String GET_LISTASUSUARIO_QUERY = "select * from editores,lista where editores.idlista = lista.id and editores.username = ?";
+	private String GET_LISTASUSUARIO_QUERY = "select * from editores,lista where editores.idlista = lista.id and editores.username = ? order by lista.id desc";
 	
 	@GET
 	@Produces(MediaType.LIFE_API_LISTA_COLLECTION)
