@@ -127,9 +127,9 @@ function getListsfromUser(url) {
 function getListabyname(listaid) {
     
 	var url = API_BASE_URL + '/listas/' + listaid;
-	$("#resultlistasxid").text('');
+	$("#resultlistasxname").text('');
 if(listaid == ""){
-	$('<br><br><div class="alert alert-danger"> <strong>No has introducido ningún valor de ID</strong></div>').appendTo($('#resultlistasxid'));
+	$('<br><br><div class="alert alert-danger"> <strong>No has introducido ningún valor de ID</strong></div>').appendTo($('#resultlistasxname'));
 }
 
 else{
@@ -142,23 +142,88 @@ else{
 
 				var listaxid = data;
 
-				$('<br><br><strong>			Nombre: ' + listaxid.nombre + '</strong><br>').appendTo($("#resultlistasxid"));
-				$('<strong>			Creador: </strong> ' + listaxid.creador + '<br>').appendTo($("#resultlistasxid"));
+				$('<br><br><strong>			Nombre: ' + listaxid.nombre + '</strong><br>').appendTo($("#resultlistasxname"));
+				$('<strong>			Creador: </strong> ' + listaxid.creador + '<br>').appendTo($("#resultlistasxname"));
 				//$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
                 var dateTime1 = new Date(listaxid.fecha_creacion);
-				$('<strong>			Fecha de creación: </strong> ' + dateTime1.toLocaleTimeString() +'   '+ dateTime1.toLocaleDateString() + '<br>').appendTo($("#resultlistasxid"));
+				$('<strong>			Fecha de creación: </strong> ' + dateTime1.toLocaleTimeString() +'   '+ dateTime1.toLocaleDateString() + '<br>').appendTo($("#resultlistasxname"));
                 var dateTime2 = new Date(listaxid.ultima_modificacion);
-	            $('<strong>			Última modificación: </strong>' + dateTime2.toLocaleTimeString() +'   '+ dateTime2.toLocaleDateString()+ '<br>').appendTo($("#resultlistasxid"));
+	            $('<strong>			Última modificación: </strong>' + dateTime2.toLocaleTimeString() +'   '+ dateTime2.toLocaleDateString()+ '<br>').appendTo($("#resultlistasxname"));
  
-         getItemsbylistaid(id_lista);
-         getEditoresdelistaid(id_lista);
+         getItemsbylistaname(id_lista);
+         getEditoresdelistaname(id_lista);
 			}).fail(function() {
-				$('<br><br><div class="alert alert-danger"> <strong>No existe ninguna lista de la que seas editor con ese id</strong></div>').appendTo($('#resultlistasxid'));
-				$("#resultitemsxid").text('');
-				$("#resulteditoresxid").text('');
+				$('<br><br><div class="alert alert-danger"> <strong>No existe ninguna lista de la que seas editor con ese id</strong></div>').appendTo($('#resultlistasxname'));
+				$("#resultitemsxname").text('');
+				$("#resulteditoresxname").text('');
 	});	
 }
 
+}
+
+//Get items de la lista por nombre
+
+function getItemsbylistaname(listaid) {
+	var url = API_BASE_URL + '/listas/' + listaid + '/items';
+	$("#resultitemsxname").text('');
+
+	$.ajax({
+		url : url,
+		type : 'GET',
+		crossDomain : true,
+		dataType : 'json',
+	}).done(function(data, status, jqxhr) {
+		var items = data;
+		$.each(items, function(i, v) {
+				var item = v;
+					$('<br><strong>			Items: </strong><br>').appendTo($("#resultitemsxname"));
+				$.each(item, function(i,v){
+					var item = v;
+					if(i == "item"){
+						$('<br><br><div class="alert alert-danger"> <strong>Lista sin items</strong></div>').appendTo($('#resultitemsxname'));
+					}
+					else{
+						$('<strong>			> ' + item.description + '</strong>     <button class="btn btn-link btn-xs" type="button" id="enlace_editar_items" ><i class="fa fa-pencil"></i>    </button> <button class="btn btn-link btn-xs" type="button" id="enlace_eliminar_items" ><i class="fa fa-trash-o"></i></button><br>').appendTo($("#resultitemsxname"));
+						//$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
+						// ID Item pensarlo bien si hace falta o no, en principio no
+					}
+					
+				})
+		})
+		
+	}).fail(function() {
+					$('<br><br><div class="alert alert-danger"> <strong>Se ha producido un error al mostrar la lista de ítems </strong></div>').appendTo($('#resultitemsxname'));
+	});
+	
+}
+
+//Get Editores de una lista por nombre
+
+function getEditoresdelistaname(listaid) {
+	var url = API_BASE_URL + '/listas/'+ listaid +'/editores';
+	$("#resulteditoresxname").text('');
+
+	$.ajax({
+		url : url,
+		type : 'GET',
+		crossDomain : true,
+		dataType : 'json',
+	}).done(function(data, status, jqxhr) {
+		var editores = data;
+		$.each(editores, function(i, v) {
+				var editor = v;
+				$('<br><strong>			Editores: </strong><br>').appendTo($("#resulteditoresxname"));
+				$.each(editor, function(i,v){
+					var editor = v;
+					
+					$('<strong>			> ' + editor.username + '</strong><br>').appendTo($("#resulteditoresxname"));
+					
+				})
+		})
+	}).fail(function() {
+					$('<br><br><div class="alert alert-danger"> <strong>Lista sin editores</strong></div>').appendTo($('#resulteditoresxname'));
+	});
+	
 }
 
 //Get cuando buscas la lista por id
@@ -199,7 +264,9 @@ else{
 
 }
 
-//Get items de la lista
+
+
+//Get items de la lista por id
 
 function getItemsbylistaid(listaid) {
 	var url = API_BASE_URL + '/listas/' + listaid + '/items';
@@ -235,7 +302,8 @@ function getItemsbylistaid(listaid) {
 	
 }
 
-//Get Editores de una lista
+
+//Get Editores de una lista por id
 
 function getEditoresdelistaid(listaid) {
 	var url = API_BASE_URL + '/listas/'+ listaid +'/editores';
