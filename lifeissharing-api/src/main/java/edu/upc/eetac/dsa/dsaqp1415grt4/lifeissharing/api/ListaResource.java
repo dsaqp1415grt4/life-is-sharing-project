@@ -677,6 +677,8 @@ public Item updateItem(@PathParam("idlista") String id,
 	public EditoresCollection getEditores(@PathParam("idlista") String id){
 		EditoresCollection editores = new EditoresCollection();
 			
+			Editores editorcompr = getEditorbyusername(id);
+			validateEditor(editorcompr);	
 			
 			Connection conn = null;
 			try {
@@ -687,6 +689,7 @@ public Item updateItem(@PathParam("idlista") String id,
 			}
 			PreparedStatement stmt = null;
 			try {
+				
 				stmt = conn.prepareStatement(GET_EDITORES_ID_QUERY);
 				stmt.setInt(1, Integer.valueOf(id));
 				ResultSet rs = stmt.executeQuery();
