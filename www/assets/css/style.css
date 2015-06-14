@@ -12,7 +12,7 @@ Premium: http://www.gridgum.com
 /* BASIC THEME CONFIGURATION */
 body {
     color: #797979;
-	background: #f2f2f2;
+	background: #f3f3f3;
     font-family: 'Ruda', sans-serif;
     padding: 0px !important;
     margin: 0px !important;
@@ -52,8 +52,8 @@ a, a:hover, a:focus {
 }
 
 .btn-round {
-	border-radius: 20px;
-	-webkit-border-radius: 20px;
+	border-radius: 30px;
+	-webkit-border-radius: 30px;
 }
 
 .accordion-heading .accordion-toggle {
@@ -236,7 +236,7 @@ ul.top-menu > li > .logout {
 }
 
 #sidebar h5 {
-	color: #f2f2f2;
+	color: #f0f0f0;
 	font-weight: 700;
 }
 

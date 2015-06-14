@@ -1,28 +1,47 @@
 var API_BASE_URL = "http://localhost:8080/lifeissharing-api";
-var USERNAME = "NachoTelematic";
-var PASSWORD = "nacho";
+username = getCookie("username");
+password = getCookie("password");
 
 data = location.search.substring(1,location.search.length);
 iddatalista = data.split("$");
 id_lista = iddatalista[1];
+dataItem = data.split("@");
+id_item = dataItem[1];
+
+
 
 $.ajaxSetup({
-    headers: { 'Authorization': "Basic " + btoa(USERNAME + ':' + PASSWORD) }
+    headers: { 'Authorization': "Basic " + btoa(username + ':' + password) }
 });
 
 
-$("#boton_login").click(function(e){
+
+
+$("#button_no").click(function(e){
     e.preventDefault();
-    setCookie("usuario", $("#user").val());
-    var z = getCookie("usuario");
-    console.log(z);
+    window.location.href="mostrar.html?$"+id_lista;
 });
+
+$("#button_no2").click(function(e){
+    e.preventDefault();
+    window.location.href="index.html";
+});
+
+$("#button_no3").click(function(e){
+    e.preventDefault();
+    window.location.href="index.html";
+});
+$("#cancelar").click(function(e){
+    e.preventDefault();
+    window.location.href="mostrar.html?$"+id_lista;
+});
+
 
 //List
 
 $(document).ready(function(){
 	getListsfromUser();
-    getListabyname(id_lista);
+    	getListabyname(id_lista);
 });
 
 //Get info completa de una lista
@@ -41,12 +60,15 @@ $("#button_crear_lista").click(function(e){
     	$('<br><br><div class="alert alert-danger"> <strong>No has introducido ningún nombre a la lista</strong></div>').appendTo($('#create_result'));
     }
     else{
+        $('<br><br><div class="alert alert-success"> <strong>Estas creando una lista</strong></div>').appendTo($("#create_result"));
     	var newlista = new Object();
     	newlista.nombre = $("#crear_nombre_lista").val();
         createLista(newlista);
     }
 });
 
+
+//CREAR
 $("#button_crear_item").click(function(e){
     e.preventDefault();
     $('#create_item_result').text('');
@@ -57,9 +79,81 @@ $("#button_crear_item").click(function(e){
         $('<br><br><div class="alert alert-success"> <strong>Estas creando un item</strong></div>').appendTo($("#create_item_result"));
     	var newitem = new Object(); 
     	newitem.description = $("#crear_nombre_item").val();
-    	createitem(id_lista, newitem);
+    	createitem(newitem,id_lista);
     }
 });
+
+
+//DELETE
+
+
+//Delete item
+$("#button_delete_item").click(function(e) {
+	e.preventDefault();
+	deleteItem(id_lista, id_item);
+			
+
+});
+
+
+//Delete lista
+$("#button_delete_lista").click(function(e) {
+	e.preventDefault();
+	deleteLista(id_lista);
+			
+
+});
+
+//salir
+$("#button_salir").click(function(e) {
+	e.preventDefault();
+	salir(id_lista);
+			
+
+});
+
+
+
+//Put item de una lista
+
+$("#button_update_item").click(function(e){
+    e.preventDefault();
+   $("#actualizar_item").text();
+    var now = new Date().getTime();
+if($("#update_nombre").val() == "")
+{
+    $('<br><br><div class="alert alert-danger"> <strong>No has introducido ningún nombre al ítem</strong></div>').appendTo($('#actualizar_item'));  
+}
+
+   else{
+   		var updated = new Object();
+    	updated.description = $("#update_nombre").val();
+   			
+	   	updateItem(updated,id_lista,id_item);
+   }
+
+});
+
+//Invitar
+
+$("#button_invitar_usuario").click(function(e){
+    e.preventDefault();
+    $('#invitar_result').text('');
+    if($("#crear_nombre_lista").val() == ""){
+    	$('<br><br><div class="alert alert-danger"> <strong>No has introducido ningún username</strong></div>').appendTo($('#invitar_result'));
+    }
+    else{
+    	var newEditor = new Object();
+    	newEditor.username = $("#invitar_nombre").val();
+        invitar(newEditor, id_lista);
+    }
+});
+
+
+
+
+
+
 
 //List
 function getListsfromUser(url) {
@@ -82,7 +176,7 @@ function getListsfromUser(url) {
 					$.each(lista, function(j,v){
 					
 						var lista = v;
-						$('<br><strong> Nombre: <a class="btn btn-link btn-xs" href="mostrar.html?$'+lista.idlista+'">' + lista.nombre + '</strong></a><br>').appendTo($("#resultlistas"));
+						$('<br><strong> Nombre: <a class="btn btn-link btn-xs" href="mostrar.html?$'+lista.idlista+'">' + lista.nombre + '</strong></a> <a class="btn btn-link btn-xs" type="button" href="borrarlista.html?$'+lista.idlista+'" ><i class="fa fa-trash-o"></i></a><br>').appendTo($("#resultlistas"));
 						$('<strong> Creador: </strong> ' + lista.creador + '<br>').appendTo($("#resultlistas"));
 						$('<strong> ID: </strong>'+lista.idlista+'<br>').appendTo($("#resultlistas"));
                         var dateTime1 = new Date(lista.fecha_creacion);
@@ -153,14 +247,14 @@ function getItemsbylistaname(listaid) {
 		var items = data;
 		$.each(items, function(i, v) {
 				var item = v;
-					$('<br><strong>			<a class="btn btn-link btn-sm" href="crearitem.html?$'+listaid+'" id="enlace_crear_items" ><i class="fa fa-plus"></i>    </a></strong><br>').appendTo($("#resultitemsxname"));
+					$('<br><strong>			Items: <a class="btn btn-link btn-sm" href="crearitem.html?$'+listaid+'" id="enlace_crear_items" ><i class="fa fa-plus"></i>    </a></strong></strong><br>').appendTo($("#resultitemsxname"));
 				$.each(item, function(i,v){
 					var item = v;
 					if(i == "item"){
 						$('<br><br><div class="alert alert-danger"> <strong>Lista sin items</strong></div>').appendTo($('#resultitemsxname'));
 					}
 					else{
-						$('<strong>			> ' + item.description + '</strong>     </i><button class="btn btn-link btn-xs" type="button" id="enlace_editar_items" ><i class="fa fa-pencil"></i>    </button> <button class="btn btn-link btn-xs" type="button" id="enlace_eliminar_items" ><i class="fa fa-trash-o"></i></button><br>').appendTo($("#resultitemsxname"));
+						$('<strong>			> ' + item.description + '</strong>     <a class="btn btn-link btn-xs" href="updateitem.html?$'+listaid+'$@'+item.iditem+'" id="enlace_editar_items" ><i class="fa fa-pencil"></i>    </a>  <a class="btn btn-link btn-xs" type="button" href="borraritem.html?$'+listaid+'$@'+item.iditem+'" ><i class="fa fa-trash-o"></i></a><br>').appendTo($("#resultitemsxname"));
 						//$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
 						// ID Item pensarlo bien si hace falta o no, en principio no
 					}
@@ -189,7 +283,7 @@ function getEditoresdelistaname(listaid) {
 		var editores = data;
 		$.each(editores, function(i, v) {
 				var editor = v;
-				$('<br><strong>			Editores: </strong><br>').appendTo($("#resulteditoresxname"));
+				$('<br><strong>			Editores: </strong> <a class="btn btn-link btn-xs" type="button" href="invitar.html?$'+listaid+'" ><i class="fa fa-plus"></i><i class="fa fa-user"></i></a>   <a class="btn btn-link btn-xs" type="button" href="salir.html?$'+listaid+'" ><i class="fa fa-minus"></i><i class="fa fa-user"></i></a><br>').appendTo($("#resulteditoresxname"));
 				$.each(editor, function(i,v){
 					var editor = v;
 					
@@ -258,14 +352,14 @@ function getItemsbylistaid(listaid) {
 		var items = data;
 		$.each(items, function(i, v) {
 				var item = v;
-            $('<br><strong>			<a class="btn btn-link btn-sm" href="crearitem.html?$'+listaid+'" id="enlace_crear_items" ><i class="fa fa-plus"></i>    </a></strong><br>').appendTo($("#resultitemsxid"));
+					$('<br><strong>			Items: <a class="btn btn-link btn-sm" href="crearitem.html?$'+listaid+'" id="enlace_crear_items" ><i class="fa fa-plus"></i>    </a></strong><br>').appendTo($("#resultitemsxid"));
 				$.each(item, function(i,v){
 					var item = v;
 					if(i == "item"){
 						$('<br><br><div class="alert alert-danger"> <strong>Lista sin items</strong></div>').appendTo($('#resultitemsxid'));
 					}
 					else{
-						$('<strong>			> ' + item.description + '</strong>     <button class="btn btn-link btn-xs" type="button" id="enlace_editar_items" ><i class="fa fa-pencil"></i>    </button> <button class="btn btn-link btn-xs" type="button" id="enlace_eliminar_items" ><i class="fa fa-trash-o"></i></button><br>').appendTo($("#resultitemsxid"));
+						$('<strong>			> ' + item.description + '</strong>     <a class="btn btn-link btn-xs" href="updateitem.html?$'+listaid+'$@'+item.iditem+'" id="enlace_editar_items" ><i class="fa fa-pencil"></i>    </a> <a class="btn btn-link btn-xs" type="button" href="borraritem.html?$'+listaid+'$@'+item.iditem+'" ><i class="fa fa-trash-o"></i></a><br>').appendTo($("#resultitemsxid"));
 						//$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
 						// ID Item pensarlo bien si hace falta o no, en principio no
 					}
@@ -295,7 +389,7 @@ function getEditoresdelistaid(listaid) {
 		var editores = data;
 		$.each(editores, function(i, v) {
 				var editor = v;
-				$('<br><strong>			Editores: </strong><br>').appendTo($("#resulteditoresxid"));
+				$('<br><strong>			Editores: </strong>  <a class="btn btn-link btn-xs" type="button" href="invitar.html?$'+listaid+'" ><i class="fa fa-plus"></i><i class="fa fa-user"></i></a>   <a class="btn btn-link btn-xs" type="button" href="salir.html?$'+listaid+'" ><i class="fa fa-minus"></i><i class="fa fa-user"></i></a><br>').appendTo($("#resulteditoresxid"));
 				$.each(editor, function(i,v){
 					var editor = v;
 					
@@ -326,7 +420,8 @@ function createLista(newlista){
 		data : data,
 	}).done(function(data, status, jqxhr) {
 		$('<div class="alert alert-success"> <strong>Ok!</strong>Lista creada con éxito</div>').appendTo($("#create_result"));
-        location.href = "index.html";
+		sleep(1000);
+        	location.href = "index.html";
 		
   	}).fail(function() {
 		$('<div class="alert alert-danger"> <strong>Se ha producido un error</strong> </div>').appendTo($("#create_result"));
@@ -336,8 +431,8 @@ function createLista(newlista){
 
 //Crear un item en una lista
 
-function createitem(idlista, newitem){
-	var url = API_BASE_URL + '/listas/'+idlista+'/items';
+function createitem(newitem,id_lista){
+	var url = API_BASE_URL + '/listas/'+id_lista+'/items';
 	var data = JSON.stringify(newitem);
 
 	$("#create_result").text('');
@@ -352,7 +447,8 @@ function createitem(idlista, newitem){
 	}).done(function(data, status, jqxhr) {
         
 		$('<div class="alert alert-success"><strong>Item añadido a la lista con éxito</strong></div>').appendTo($("#create_item_result"));
-        window.location.href="mostrar.html?$"+idlista;
+		sleep(1000);        
+		window.location.href="mostrar.html?$"+id_lista;
 		
   	}).fail(function() {
 		$('<div class="alert alert-danger"> <strong>Se ha producido un error</strong> </div>').appendTo($("#create_item_result"));
@@ -360,36 +456,147 @@ function createitem(idlista, newitem){
 
 }
 
+//DELETE ITEM
+
+
+function deleteItem(id_lista, id_item){
+
+	var url = API_BASE_URL + '/listas/'+ id_lista + '/items/'+ id_item;
+	$("#delete_item").text('');
+
+	$.ajax({
+		url : url,
+		type : 'DELETE',
+		crossDomain : true,
+		dataType : 'json',
+		statusCode: {
+    		202: function() {$('<div class="alert alert-danger"> <strong>Ok!</strong> Item Borrado </div>').appendTo($("#delete_item"));},
+		404: function() {$('<div class="alert alert-danger"> <strong>Oh!</strong> Item no encontrado </div>').appendTo($("#delete_item"));}
+    	}
+	}).done(function(data, status, jqxhr) {
+		$('<div class="alert alert-success"> <strong>Ok!</strong> Item borrado correctamente </div>').appendTo($("#delete_item"));
+		sleep(1000);
+		window.location.href="mostrar.html?$"+id_lista;				
+  	});
+
+
+
+
+}
+
+//DELETE
+
+
+function deleteLista(id_lista){
+
+	var url = API_BASE_URL + '/listas/'+ id_lista;
+	$("#delete_lista").text('');
+
+	$.ajax({
+		url : url,
+		type : 'DELETE',
+		crossDomain : true,
+		dataType : 'json',
+		statusCode: {
+    		202: function() {$('<div class="alert alert-success"> <strong>Ok!</strong> Lista Borrada </div>').appendTo($("#delete_lista"));},
+		403: function() {$('<div class="alert alert-danger"> <strong>Oh!</strong> No eres el creador de la lista </div>').appendTo($("#delete_lista"))
+		sleep(1000);
+		window.location.href="index.html";		;}
+    	}
+	}).done(function(data, status, jqxhr) {
+		$('<div class="alert alert-success"> <strong>Ok!</strong> Lista borrada correctamente </div>').appendTo($("#delete_lista"));
+		window.location.href="index.html";				
+  	});
+
+
+
+
+}
+
+//INVITAR
+function invitar(newEditor, id_lista){
+	var url = API_BASE_URL + '/listas/'+ id_lista + '/editores';
+	var data = JSON.stringify(newEditor);
+
+	$("#invitar_result").text('');
+
+	$.ajax({
+		url : url,
+		type : 'POST',
+		crossDomain : true,
+		dataType : 'json',
+		contentType : "application/vnd.life.api.lista+json; charset=utf-8",
+		data : data,
+		statusCode: {
+		403: function() {$('<div class="alert alert-danger"> <strong>Oh!</strong> No eres el creador de la lista </div>').appendTo($("#invitar_result"));},
+		404: function() {$('<div class="alert alert-danger"> <strong>Oh!</strong> No existe un usuario con ese Username </div>').appendTo($("#invitar_result"));}
+    	}
+	}).done(function(data, status, jqxhr) {
+		$('<div class="alert alert-success"> <strong>Ok!</strong>Usuario invitado</div>').appendTo($("#invitar_result"));
+		sleep(1000);
+		window.location.href="mostrar.html?$"+id_lista;	
+		
+  	}).fail(function() {
+		//$('<div class="alert alert-danger"> <strong>Se ha producido un error</strong> </div>').appendTo($("#invitar_result"));
+	});
+
+}
+
+//SALIR
+function salir(id_lista){
+
+	var url = API_BASE_URL + '/listas/'+ id_lista +'/editores';
+	$("#salir_lista").text('');
+
+	$.ajax({
+		url : url,
+		type : 'DELETE',
+		crossDomain : true,
+		dataType : 'json',
+		statusCode: {
+    		202: function() {$('<div class="alert alert-success"> <strong>Ok!</strong> ¡¡Hasta pronto!! </div>').appendTo($("#salir_lista"));},
+		404: function() {$('<div class="alert alert-danger"> <strong>Oh!</strong> No perteneces a esta lista </div>').appendTo($("#salir_lista"))
+		sleep(1000);
+		window.location.href="index.html";		;}
+    	}
+	}).done(function(data, status, jqxhr) {
+		$('<div class="alert alert-success"> <strong>Ok!</strong> ¡¡Hasta pronto!! </div>').appendTo($("#salir_lista"));
+		window.location.href="index.html";				
+  	});
+
+
+
+
+}
+
+
 //Actualizar item de una lista
 
-/*function updateItem(lista) {
-	var url = API_BASE_URL + '/listas/' + file.name;
-	var data = JSON.stringify(lista);
-
-	$("#result").text('');
+function updateItem(description, id_lista, id_item) {
+	var url = API_BASE_URL + '/listas/' + id_lista + '/items/' + id_item;
+	console.log(url);
+	
+	var data = JSON.stringify(description);
+	console.log(data); 	 	
+	$("#actualizar_item").text('');
 
 	$.ajax({
 		url : url,
 		type : 'PUT',
 		crossDomain : true,
 		dataType : 'json',
+		contentType : "application/vnd.life.api.lista+json; charset=utf-8",
 		data : data,
-        contentType : "application/json; charset=utf-8",
-		statusCode: {
-    		404: function() {$('<div class="alert alert-danger"> <strong>Oh!</strong> Page not found </div>').appendTo($("#result"));}
-    	}
 	}).done(function(data, status, jqxhr) {
-		$('<div class="alert alert-success"> <strong>Ok!</strong> Repository Updated</div>').appendTo($("#result"));
-		$('<br><br><strong>			Nombre: ' + lista.nombre + '</strong><br>').appendTo($("#resultlistasxid"));
-		$('<strong>			Creador: </strong> ' + lista.creador + '<br>').appendTo($("#resultlistasxid"));
-		$('<strong> ID: </strong>' + lista.idlista + '<br>').appendTo($("#resultlistas"));
-		$('<strong>			Fecha: </strong> ' + lista.fecha_creacion + '<br>').appendTo($("#resultlistasxid"));
-        $('<strong>			Ultima modificación: </strong>' + lista.ultima_modificacion + '<br><br>').appendTo($("#resultlistasxid"));
+		$('<div class="alert alert-success"> <strong>OK!</strong> Item añadido correcto </div>').appendTo($("#actualizar_item"));
+		sleep(1000);
+		window.location.href="mostrar.html?$"+id_lista;
   	}).fail(function() {
-		$('<div class="alert alert-danger"> <strong>Oh!</strong> Error </div>').appendTo($("#result"));
+		
+		$('<div class="alert alert-danger"> <strong>Oh!</strong> Error </div>').appendTo($("#actualizar_item"));
 	});
 
-}*/
+}
 
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
@@ -409,11 +616,22 @@ function getCookie(cname) {
     return "";
 }
 
-function getURIParameter(param, asArray) {
-    return document.location.search.substring(1).split('&').reduce(function(p,c) {
-        var parts = c.split('=', 2).map(function(param) { return decodeURIComponent(param); });
-        if(parts.length == 0 || parts[0] != param) return (p instanceof Array) && !asArray ? null : p;
-        return asArray ? p.concat(parts.concat(true)[1]) : parts.concat(true)[1];
-    }, []);
+
+//SLEEP
+
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
 }
+
+
+
+
+
+
 
