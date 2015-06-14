@@ -520,6 +520,7 @@ public Item updateItem(@PathParam("idlista") String id,
 		} catch (SQLException e) {
 		}
 	}
+	actualizarHora(id);
 	return item;
 }
 
@@ -619,7 +620,7 @@ public Item updateItem(@PathParam("idlista") String id,
 			}
 		}
 
-		
+		actualizarHora(id);
 		return item;
 		
 	}
@@ -662,7 +663,7 @@ public Item updateItem(@PathParam("idlista") String id,
 			} catch (SQLException e) {
 			}
 		}
-		
+		actualizarHora(id);
 
 }
 	
@@ -825,7 +826,7 @@ private String GET_EDITOR_BY_USERNAME_QUERY = "select username from editores whe
 		}
 		
 				
-		
+		actualizarHora(id);
 		return editor;
 		
 	}
@@ -866,7 +867,7 @@ private String GET_EDITOR_BY_USERNAME_QUERY = "select username from editores whe
 			} catch (SQLException e) {
 			}
 		}
-		
+		actualizarHora(id);
 
 	}
 	
@@ -914,9 +915,43 @@ private String GET_EDITOR_BY_USERNAME_QUERY = "select username from editores whe
 		
 		
 	}
+	
+	
+	private String UPDATE_HORA_QUERY = "update lista set ultima_modificacion=ifnull(now(), ultima_modificacion) where lista.id=?";
+	
+	public void actualizarHora(String idlista){
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(UPDATE_HORA_QUERY);
+			
+			stmt.setInt(1, Integer.valueOf(idlista));
+			
+			int rows = stmt.executeUpdate();
 
-	
-	
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		
+		
+		
+	}
+
+		
 }
 	
 	
