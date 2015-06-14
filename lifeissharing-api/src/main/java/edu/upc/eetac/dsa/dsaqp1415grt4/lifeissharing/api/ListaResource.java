@@ -838,6 +838,10 @@ private String GET_EDITOR_BY_USERNAME_QUERY = "select username from editores whe
 	@DELETE
 	@Path("/{idlista}/editores")
 	public void salirLista(@PathParam("idlista") String id) {
+		EditoresCollection editores = new EditoresCollection();
+		boolean creador;
+		creador = soyCreador(getListaFromDatabase(id));
+		
 		Connection conn = null;
 		try {
 			conn = ds.getConnection();
@@ -867,7 +871,15 @@ private String GET_EDITOR_BY_USERNAME_QUERY = "select username from editores whe
 			} catch (SQLException e) {
 			}
 		}
+		
+		if(creador==true){
+			editores = getEditoresByID(id);
+			System.out.println(editores.getEditores().get(1).getUsername());
+			updateCreador(id,editores.getEditores().get(1).getUsername());
+					
+		}
 		actualizarHora(id);
+
 
 	}
 	
@@ -947,11 +959,92 @@ private String GET_EDITOR_BY_USERNAME_QUERY = "select username from editores whe
 			}
 		}
 		
+				
+	}
+
+	
+
+	private boolean soyCreador(Lista lista){
+		
+		if(security.getUserPrincipal().getName().equals(lista.getCreador())){
+			return true;
+		}else
+			return false;
+	}
+		
+	
+	private String GET_EDITORES_BY_ID_QUERY = "select * from editores where editores.idlista=?";
+	public  EditoresCollection getEditoresByID(String id){
+		
+		EditoresCollection editores = new EditoresCollection();
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(GET_EDITORES_BY_ID_QUERY);
+			stmt.setInt(1, Integer.valueOf(id));
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Editores editor = new Editores();
+				
+				editor.setUsername(rs.getString("username"));
+				editores.addEditor(editor);
+				
+			} 
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
+		return editores;
+	}
+	
+	private String UPDATE_CREADOR_QUERY = "update lista set creador=ifnull(?, creador) where lista.id=?";
+	public void updateCreador(String id, String creador){
+		
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
+			throw new ServerErrorException("Could not connect to the database",
+					Response.Status.SERVICE_UNAVAILABLE);
+		}
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement(UPDATE_CREADOR_QUERY);
+			
+			stmt.setString(1, creador);
+			stmt.setInt(2, Integer.valueOf(id));
+			
+			int rows = stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new ServerErrorException(e.getMessage(),
+					Response.Status.INTERNAL_SERVER_ERROR);
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+			}
+		}
 		
 		
 	}
-
-		
+	
+	
 }
 	
 	
