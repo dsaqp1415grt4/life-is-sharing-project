@@ -258,7 +258,7 @@ function getItemsbylistaid(listaid) {
 		var items = data;
 		$.each(items, function(i, v) {
 				var item = v;
-					$('<br><strong>			Items: </strong><br>').appendTo($("#resultitemsxid"));
+            $('<br><strong>			<a class="btn btn-link btn-sm" href="crearitem.html?$'+listaid+'" id="enlace_crear_items" ><i class="fa fa-plus"></i>    </a></strong><br>').appendTo($("#resultitemsxid"));
 				$.each(item, function(i,v){
 					var item = v;
 					if(i == "item"){
