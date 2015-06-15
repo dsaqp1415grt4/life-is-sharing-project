@@ -36,54 +36,20 @@
       <!-- **********************************************************************************************************************************************************
       TOP BAR CONTENT & NOTIFICATIONS
       *********************************************************************************************************************************************************** -->
-      <!--header start-->
+      <!-- nuevo -->
+	  <!--header start-->
       <header class="header black-bg">
               <div class="sidebar-toggle-box">
                   <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
               </div>
             <!--logo start-->
-            <a href="index.html" class="logo"><b>NOMBRE DE USUARIO</b></a>
+            <a href="main.html" class="logo" id="nombre_usuario_mostrado"></a>
             <!--logo end-->
-            <div class="nav notify-row" id="top_menu">
-                <!--  notification start -->
-                <ul class="nav top-menu">
-                    <!-- settings start -->
-                    <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
-                            <i class="fa fa-tasks"></i>
-                            <span class="badge bg-theme">4</span>
-                        </a>
-                        <ul class="dropdown-menu extended tasks-bar">
-                            <div class="notify-arrow notify-arrow-green"></div>
-                            <li>
-                                <p class="green">You have 4 pending tasks</p>
-                            </li>
-                            
-                        </ul>
-                    </li>
-                    <!-- settings end -->
-                    <!-- inbox dropdown start-->
-                    <!--<li id="header_inbox_bar" class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
-                            <i class="fa fa-envelope-o"></i>
-                            <span class="badge bg-theme">5</span>
-                        </a>
-                        <ul class="dropdown-menu extended inbox">
-                            <div class="notify-arrow notify-arrow-green"></div>
-                            <li>
-                                <p class="green">You have 5 new messages</p>
-                            </li>
-                            
-                        </ul>
-                    </li>-->
-                    <!-- inbox dropdown end -->
-                </ul>
-                <!--  notification end -->
-            </div>
-		<span id=login_result"></span>
+          
+		<span id="login_result"></span>
             <div class="top-menu">
             	<ul class="nav pull-right top-menu">
-                    <li><a class="logout" href="login.html">Logout</a></li>
+                    <li><a class="logout" href="index.html" id="logout">Logout</a></li>
 		    
             	</ul>
             </div>
@@ -103,7 +69,7 @@
               	  <h5 class="centered">Life is Sharing</h5>
               	  	
                   <li class="mt">
-                      <a class="active" href="index.html">
+                      <a class="active" href="main.html">
                           <i class="fa fa-home" ></i>
                           <span>Home</span>
 						  
@@ -112,43 +78,22 @@
                   </li>
 				  
                   <li class="sub-menu">
-                      <a href="javascript:;" >
+                      <a href="crearlista.html" >
                           <i class="fa fa-plus"></i>
-                          <span>Crear</span>
+                          <span>Crear lista</span>
                       </a>
-						<ul class="sub">
-							<li><a  href="crearlista.html">Crear nueva lista</a></li>
-							<li><a href="crearitem.html">Crear nuevo ítem</a></li>
-						</ul>
                   </li>
 
                   <li class="sub-menu">
                       <a href="mostrarlistaid.html" >
                           <i class="fa fa-th-list"></i><span>Mostrar lista</span></a>
                   </li>
-				  
-                  <li class="sub-menu">
-                      <a  href="editaritem.html">
-					  <i class="fa fa-edit"></i> <span> <--Esto es provisional--> </span></a>
-                  </li>
-				  
-                  <li class="sub-menu">
-                      <a href="javascript:;" >
-                          <i class="fa fa-trash-o"></i>
-                          <span>Borrar</span>
-                      </a>
-                      <ul class="sub">
-                          <li><a  href="borrarlista.html">Borrar lista</a></li>
-						  <li><a  href="borraritem.html">Borrar ítem</a></li>
-                      </ul>
-                  </li>
               </ul>
               <!-- sidebar menu end-->
           </div>
       </aside>
       <!--sidebar end-->
-	  <!-- nuevo -->
-      
+    
       <!-- **********************************************************************************************************************************************************
       MAIN CONTENT
       *********************************************************************************************************************************************************** -->
@@ -162,20 +107,22 @@
                   	<div class="row mt">
           		<div class="col-lg-12">
                   <div class="form-panel">
-                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> Borrar Gists</h4>
+                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> ¿Estás seguro?</h4>
 				<form class="form-horizontal style-form" method="get">
-                          <div class="form-group">
-                              <label class="col-sm-2 col-sm-2 control-label">ID</label>
-                              <div class="col-sm-5">
-                                  <input type="text" class="form-control" id="id_gist">
-                              </div>				
+                          
+                                                       				
 				<div>
-				<button class="btn btn-info" type="button" id="boton_borrar_gists_id">Borrar Gists</button>
+	
+				<button class="btn btn-success" id="button_delete_item">Sí</button>
+				<button class="btn btn-danger" id="button_no">No</button>
+						
+
 				</div>
 				<div>
-				<span id="borrar_gist">
+				<span id="delete_item">
 				</span>
 				</div>
+			
                      		</form>
                   </div>
           		</div><!-- col-lg-12-->      	
@@ -204,7 +151,7 @@
       <footer class="site-footer">
           <div class="text-center">
               2015 - Ignacio Arroyo, David Arroyo, Angel Supervia
-              <a href="index.html#" class="go-top">
+              <a href="main.html#" class="go-top">
                   <i class="fa fa-angle-up"></i>
               </a>
           </div>
@@ -221,7 +168,7 @@
     <script src="assets/js/jquery.scrollTo.min.js"></script>
     <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
     <script src="assets/js/jquery.sparkline.js"></script>
-    <script src="assets/js/metodosGists.js"></script>
+    <script src="assets/js/listas.js"></script>
     <script src="assets/js/weblinking.js"></script>
 
 
