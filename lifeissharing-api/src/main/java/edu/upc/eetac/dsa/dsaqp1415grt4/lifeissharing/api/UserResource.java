@@ -28,7 +28,7 @@ public class UserResource {
 	private DataSource ds = DataSourceSPA.getInstance().getDataSource();
 
 	private final static String GET_USER_BY_USERNAME_QUERY = "select * from usuario where username=?";
-	private final static String INSERT_USER_INTO_USERS = "insert into usuario values(?, MD5(?), ?, ?)";
+	private final static String INSERT_USER_INTO_USERS = "insert into usuario values(?, ?, ?, MD5(?))";
 	private final static String INSERT_USER_INTO_USER_ROLES = "insert into user_roles values (?, 'registered')";
 
 	@POST

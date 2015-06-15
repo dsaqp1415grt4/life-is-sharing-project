@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 var API_BASE_URL = "http://localhost:8080/lifeissharing-api";
+=======
+var API_BASE_URL = "http://147.83.7.159:8080/lifeissharing-api";
+>>>>>>> devNacho
 username = getCookie("username");
 password = getCookie("password");
 
@@ -12,15 +16,73 @@ id_item = dataItem[1];
 
 $.ajaxSetup({
     headers: { 'Authorization': "Basic " + btoa(username + ':' + password) }
+<<<<<<< HEAD
+=======
 });
 
 
 
+$("#logout").click(function(e) {
+   e.preventDefault();
+   Logout();
+});
+
+$("#boton_cancelar").click(function(e){
+    e.preventDefault();
+    window.location.href="index.html";
+});
+$("#boton_cancelar2").click(function(e){
+    e.preventDefault();
+    window.location.href="main.html";
+});
+
+//REGISTRAR
+$("#button_registrar").click(function(e){
+    e.preventDefault();
+    $('#registrar_result').text('');
+    if($("#registrar_username").val() == ""||$("#registrar_password").val() == ""||$("#registrar_email").val() == ""||$("#registrar_nombre").val() == ""){
+    	$('<br><br><div class="alert alert-danger"> <strong>Has de rellenar todos los campos</strong></div>').appendTo($('#registrar_result'));
+    }
+    else{
+    	var newusuario = new Object(); 
+    newusuario.name = $("#registrar_nombre").val();
+    newusuario.email = $("#registrar_email").val();
+    newusuario.username = $("#registrar_username").val();
+	newusuario.password = $("#registrar_password").val();
+	
+	
+    	registrar(newusuario);
+    }
+>>>>>>> devNacho
+});
 
 $("#button_no").click(function(e){
     e.preventDefault();
     window.location.href="mostrar.html?$"+id_lista;
 });
+
+$("#button_no2").click(function(e){
+    e.preventDefault();
+    window.location.href="main.html";
+});
+
+<<<<<<< HEAD
+
+
+$("#button_no").click(function(e){
+    e.preventDefault();
+    window.location.href="mostrar.html?$"+id_lista;
+=======
+$("#button_no3").click(function(e){
+    e.preventDefault();
+    window.location.href="main.html";
+>>>>>>> devNacho
+});
+$("#cancelar").click(function(e){
+    e.preventDefault();
+    window.location.href="mostrar.html?$"+id_lista;
+});
+
 
 $("#button_no2").click(function(e){
     e.preventDefault();
@@ -40,6 +102,7 @@ $("#cancelar").click(function(e){
 //List
 
 $(document).ready(function(){
+    $("#nombre_usuario_mostrado").text(username);
 	getListsfromUser();
     	getListabyname(id_lista);
 });
@@ -421,7 +484,11 @@ function createLista(newlista){
 	}).done(function(data, status, jqxhr) {
 		$('<div class="alert alert-success"> <strong>Ok!</strong>Lista creada con éxito</div>').appendTo($("#create_result"));
 		sleep(1000);
+<<<<<<< HEAD
         	location.href = "index.html";
+=======
+        	location.href = "main.html";
+>>>>>>> devNacho
 		
   	}).fail(function() {
 		$('<div class="alert alert-danger"> <strong>Se ha producido un error</strong> </div>').appendTo($("#create_result"));
@@ -457,16 +524,24 @@ function createitem(newitem,id_lista){
 }
 
 //DELETE ITEM
+<<<<<<< HEAD
 
 
 function deleteItem(id_lista, id_item){
 
+=======
+
+
+function deleteItem(id_lista, id_item){
+
+>>>>>>> devNacho
 	var url = API_BASE_URL + '/listas/'+ id_lista + '/items/'+ id_item;
 	$("#delete_item").text('');
 
 	$.ajax({
 		url : url,
 		type : 'DELETE',
+<<<<<<< HEAD
 		crossDomain : true,
 		dataType : 'json',
 		statusCode: {
@@ -525,11 +600,72 @@ function invitar(newEditor, id_lista){
 		type : 'POST',
 		crossDomain : true,
 		dataType : 'json',
+=======
+		crossDomain : true,
+		dataType : 'json',
+		statusCode: {
+    		202: function() {$('<div class="alert alert-danger"> <strong>Ok!</strong> Item Borrado </div>').appendTo($("#delete_item"));},
+		404: function() {$('<div class="alert alert-danger"> <strong>Oh!</strong> Item no encontrado </div>').appendTo($("#delete_item"));}
+    	}
+	}).done(function(data, status, jqxhr) {
+		$('<div class="alert alert-success"> <strong>Ok!</strong> Item borrado correctamente </div>').appendTo($("#delete_item"));
+		sleep(1000);
+		window.location.href="mostrar.html?$"+id_lista;				
+  	});
+
+
+
+
+}
+
+//DELETE
+
+
+function deleteLista(id_lista){
+
+	var url = API_BASE_URL + '/listas/'+ id_lista;
+	$("#delete_lista").text('');
+
+	$.ajax({
+		url : url,
+		type : 'DELETE',
+		crossDomain : true,
+		dataType : 'json',
+		statusCode: {
+    		202: function() {$('<div class="alert alert-success"> <strong>Ok!</strong> Lista Borrada </div>').appendTo($("#delete_lista"));},
+		403: function() {$('<div class="alert alert-danger"> <strong>Oh!</strong> No eres el creador de la lista </div>').appendTo($("#delete_lista"))
+		sleep(1000);
+		window.location.href="main.html";		;}
+    	}
+	}).done(function(data, status, jqxhr) {
+		$('<div class="alert alert-success"> <strong>Ok!</strong> Lista borrada correctamente </div>').appendTo($("#delete_lista"));
+		window.location.href="main.html";				
+  	});
+
+
+
+
+}
+
+//INVITAR
+function invitar(newEditor, id_lista){
+	var url = API_BASE_URL + '/listas/'+ id_lista + '/editores';
+	var data = JSON.stringify(newEditor);
+
+	$("#invitar_result").text('');
+
+	$.ajax({
+		url : url,
+		type : 'POST',
+		crossDomain : true,
+		dataType : 'json',
+>>>>>>> devNacho
 		contentType : "application/vnd.life.api.lista+json; charset=utf-8",
 		data : data,
 		statusCode: {
 		403: function() {$('<div class="alert alert-danger"> <strong>Oh!</strong> No eres el creador de la lista </div>').appendTo($("#invitar_result"));},
 		404: function() {$('<div class="alert alert-danger"> <strong>Oh!</strong> No existe un usuario con ese Username </div>').appendTo($("#invitar_result"));}
+<<<<<<< HEAD
     	}
 	}).done(function(data, status, jqxhr) {
 		$('<div class="alert alert-success"> <strong>Ok!</strong>Usuario invitado</div>').appendTo($("#invitar_result"));
@@ -562,6 +698,40 @@ function salir(id_lista){
 	}).done(function(data, status, jqxhr) {
 		$('<div class="alert alert-success"> <strong>Ok!</strong> ¡¡Hasta pronto!! </div>').appendTo($("#salir_lista"));
 		window.location.href="index.html";				
+=======
+    	}
+	}).done(function(data, status, jqxhr) {
+		$('<div class="alert alert-success"> <strong>Ok!</strong>Usuario invitado</div>').appendTo($("#invitar_result"));
+		sleep(1000);
+		window.location.href="mostrar.html?$"+id_lista;	
+		
+  	}).fail(function() {
+		//$('<div class="alert alert-danger"> <strong>Se ha producido un error</strong> </div>').appendTo($("#invitar_result"));
+	});
+
+}
+
+//SALIR
+function salir(id_lista){
+
+	var url = API_BASE_URL + '/listas/'+ id_lista +'/editores';
+	$("#salir_lista").text('');
+
+	$.ajax({
+		url : url,
+		type : 'DELETE',
+		crossDomain : true,
+		dataType : 'json',
+		statusCode: {
+    		202: function() {$('<div class="alert alert-success"> <strong>Ok!</strong> ¡¡Hasta pronto!! </div>').appendTo($("#salir_lista"));},
+		404: function() {$('<div class="alert alert-danger"> <strong>Oh!</strong> No perteneces a esta lista </div>').appendTo($("#salir_lista"))
+		sleep(1000);
+		window.location.href="main.html";		;}
+    	}
+	}).done(function(data, status, jqxhr) {
+		$('<div class="alert alert-success"> <strong>Ok!</strong> ¡¡Hasta pronto!! </div>').appendTo($("#salir_lista"));
+		window.location.href="main.html";				
+>>>>>>> devNacho
   	});
 
 
@@ -616,6 +786,7 @@ function getCookie(cname) {
     return "";
 }
 
+<<<<<<< HEAD
 
 //SLEEP
 
@@ -629,6 +800,56 @@ function sleep(milliseconds) {
   }
 }
 
+=======
+//Registrar
+
+
+function registrar(user) {
+  var url = API_BASE_URL + '/users';
+  var data = JSON.stringify(user);
+  
+    $.ajax({
+    url : url,
+    type : 'POST',
+    crossDomain : true,
+    dataType : 'json',  
+    contentType : 'application/vnd.life.api.user+json',
+    data : data,      
+    }).done(function(data, status, jqxhr) {
+         $('<div class="alert alert-success"> <strong>OK!</strong> ¡Ya estás registrado! </div>').appendTo($("#registrar_result"));
+	  sleep(1000);
+	  window.location.href="index.html";
+    }).fail(function() {
+         $('<div class="alert alert-danger"> <strong>OK!</strong> Error al registrarte </div>').appendTo($("#registrar_result"));
+          sleep(1000);
+	  window.location.href="index.html";
+  });   
+
+
+};
+
+
+function Logout(){
+
+document.cookie="username = "+ "";
+document.cookie="loginSucessful = " + "";
+window.location.href="index.html";
+ 
+}
+
+//SLEEP
+
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
+>>>>>>> devNacho
 
 
 

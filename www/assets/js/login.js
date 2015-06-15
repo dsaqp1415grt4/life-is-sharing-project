@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 var API_BASE_URL = "http://localhost:8080/lifeissharing-api";
+=======
+var API_BASE_URL = "http://147.83.7.159:8080/lifeissharing-api";
+>>>>>>> devNacho
 
 var username = getCookie("username");
 var password = getCookie("password");
@@ -41,7 +45,11 @@ function Login(login){
 		
          		document.cookie="username = " + data.username;
 				document.cookie="loginSuccessful = " + data.loginSuccesful;
+<<<<<<< HEAD
 				window.location.href="index.html";
+=======
+				window.location.href="main.html";
+>>>>>>> devNacho
  
 
             }
